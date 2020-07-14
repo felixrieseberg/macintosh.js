@@ -1,0 +1,34 @@
+disk system7.img
+disk DCImage.img
+extfs /
+screen win/800/600
+seriala
+serialb
+udptunnel false
+udpport 6066
+rom Quadra-650.rom
+bootdrive 0
+bootdriver 0
+ramsize 268435456
+frameskip 1
+modelid 14
+cpu 4
+fpu true
+nocdrom true
+nosound false
+noclipconversion false
+nogui true
+jit false
+jitfpu false
+jitdebug false
+jitcachesize 8192
+jitlazyflush true
+jitinline true
+keyboardtype 5
+keycodes false
+mousewheelmode 1
+mousewheellines 3
+dsp /dev/dsp
+mixer /dev/mixer
+ignoresegv false
+idlewait false
