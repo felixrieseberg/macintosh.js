@@ -1,5 +1,8 @@
-var memAllocSet = new Set();
-var memAllocSetPersistent = new Set();
+const fs = require('fs');
+const path = require('path');
+
+const memAllocSet = new Set();
+const memAllocSetPersistent = new Set();
 
 function memAllocAdd(addr) {
   if (memAllocSet.has(addr)) {
@@ -88,8 +91,26 @@ var LockStates = {
 var Module = null;
 
 self.onmessage = function(msg) {
-  console.log('init worker');
-  startEmulator(Object.assign({}, msg.data, {singleThreadedEmscripten: true}));
+  console.log('Worker message received', msg.data);
+
+  // If it's a config object, start the show
+  if (msg && msg.data && msg.data.SCREEN_WIDTH) {
+    console.log('Start emulator worker');
+    startEmulator(Object.assign({}, msg.data, {singleThreadedEmscripten: true}));
+  }
+
+  if (msg && msg.data === 'save') {
+    const diskData = Module.FS.readFile('/disk');
+    const diskPath = path.join(__dirname, 'disk');
+
+    fs.writeFile(diskPath, diskData, (error) => {
+      console.log(`Finished writing disk`);
+
+      if (error) {
+        console.error(error);
+      }
+    });
+  }
 };
 
 function startEmulator(parentConfig) {
@@ -196,7 +217,7 @@ function startEmulator(parentConfig) {
   var AudioBufferQueue = [];
 
   Module = {
-    autoloadFiles: ['system7.img', 'DCImage.img', 'disk1.img', 'Quadra-650.rom', 'prefs'],
+    autoloadFiles: ['disk', 'rom', 'prefs'],
 
     arguments: ['--config', 'prefs'],
     canvas: null,
@@ -294,7 +315,12 @@ function startEmulator(parentConfig) {
       }
     },
 
-    print: console.log.bind(console),
+    print: (message) => {
+      postMessage({
+        type: 'TTY',
+        data: message
+      });
+    },
 
     printErr: console.warn.bind(console),
 

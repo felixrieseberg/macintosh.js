@@ -3,13 +3,14 @@
   "productName": "macintosh",
   "version": "1.0.0",
   "description": "Macintosh's System 7 in an Electron app. I'm sorry.",
-  "main": "src/index.js",
+  "main": "src/main/index.js",
   "scripts": {
     "start": "electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
-    "lint": "echo \"No linting configured\""
+    "lint": "npx prettier --check src/{main,renderer}/*.js",
+    "fix": "npx prettier --write src/{main,renderer}/*.js"
   },
   "keywords": [],
   "author": {
@@ -53,6 +54,6 @@
     "@electron-forge/maker-rpm": "6.0.0-beta.52",
     "@electron-forge/maker-squirrel": "6.0.0-beta.52",
     "@electron-forge/maker-zip": "6.0.0-beta.52",
-    "electron": "9.1.0"
+    "electron": "10.0.0-beta.12"
   }
 }

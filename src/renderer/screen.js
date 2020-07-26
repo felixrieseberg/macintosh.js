@@ -1,5 +1,5 @@
-const { videoModeBufferView } = require('./video');
-const { audioContext } = require('./audio');
+const { videoModeBufferView } = require("./video");
+const { audioContext } = require("./audio");
 
 const SCREEN_WIDTH = 800;
 const SCREEN_HEIGHT = 600;
@@ -11,7 +11,7 @@ const screenBufferView = new Uint8Array(screenBuffer);
 canvas.width = SCREEN_WIDTH;
 canvas.height = SCREEN_HEIGHT;
 
-const canvasCtx = canvas.getContext('2d');
+const canvasCtx = canvas.getContext("2d");
 const imageData = canvasCtx.createImageData(SCREEN_WIDTH, SCREEN_HEIGHT);
 
 function drawScreen() {
@@ -38,7 +38,6 @@ function drawScreen() {
     }
   }
 
-
   canvasCtx.putImageData(imageData, 0, 0);
 }
 
@@ -48,5 +47,5 @@ module.exports = {
   SCREEN_BUFFER_SIZE,
   drawScreen,
   SCREEN_WIDTH,
-  SCREEN_HEIGHT
-}
+  SCREEN_HEIGHT,
+};

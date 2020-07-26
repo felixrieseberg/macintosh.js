@@ -1,7 +1,17 @@
-const { inputBuffer, INPUT_BUFFER_SIZE } = require('./input')
-const { videoModeBuffer, VIDEO_MODE_BUFFER_SIZE } = require('./video')
-const { screenBuffer, SCREEN_BUFFER_SIZE, SCREEN_WIDTH, SCREEN_HEIGHT } = require('./screen')
-const { audio, audioDataBuffer, audioBlockChunkSize, AUDIO_DATA_BUFFER_SIZE } = require('./audio')
+const { inputBuffer, INPUT_BUFFER_SIZE } = require("./input");
+const { videoModeBuffer, VIDEO_MODE_BUFFER_SIZE } = require("./video");
+const {
+  screenBuffer,
+  SCREEN_BUFFER_SIZE,
+  SCREEN_WIDTH,
+  SCREEN_HEIGHT,
+} = require("./screen");
+const {
+  audio,
+  audioDataBuffer,
+  audioBlockChunkSize,
+  AUDIO_DATA_BUFFER_SIZE,
+} = require("./audio");
 
 function registerWorker() {
   var workerConfig = {
@@ -19,19 +29,17 @@ function registerWorker() {
     SCREEN_HEIGHT: SCREEN_HEIGHT,
   };
 
-  var worker = new Worker('../basilisk/BasiliskII-worker-boot.js');
+  var worker = window.emulatorWorker = new Worker("../basilisk/BasiliskII-worker-boot.js");
 
   worker.postMessage(workerConfig);
-  worker.onmessage = function(e) {
+  worker.onmessage = function (e) {
     if (
-      e.data.type === 'emulator_ready' ||
-      e.data.type === 'emulator_loading'
+      e.data.type === "emulator_ready" ||
+      e.data.type === "emulator_loading"
     ) {
       // document.body.className =
       //   e.data.type === 'emulator_ready' ? '' : 'loading';
-
       // const progressElement = document.getElementById('progress');
-
       // if (progressElement && e.data.type === 'emulator_loading') {
       //   progressElement.value = Math.max(10, e.data.completion * 100);
       //   progressElement.max = 100;
@@ -42,9 +50,24 @@ function registerWorker() {
       //   progressElement.hidden = true;
       // }
     }
+
+    if (e.data.type === 'TTY') {
+      // If we're shutting down, Basilisk II will send
+      // close_audio to TTY - our signal that we can
+      // save the disk image
+      if (e.data.message === 'close_audio') {
+        worker.postMessage('save');
+      }
+    }
   };
 }
 
-module.exports = {
-  registerWorker
+function saveDisk() {
+
+
+  worker.postMessage('save');
 }
+
+module.exports = {
+  registerWorker,
+};

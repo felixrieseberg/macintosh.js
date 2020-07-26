@@ -1,4 +1,4 @@
-const { acquireLock, releaseLock } = require('./atomics');
+const { acquireLock, releaseLock } = require("./atomics");
 
 const INPUT_BUFFER_SIZE = 100;
 const inputBuffer = new SharedArrayBuffer(INPUT_BUFFER_SIZE * 4);
@@ -41,23 +41,23 @@ function tryToSendInput() {
   for (var i = 0; i < inputQueue.length; i++) {
     var inputEvent = inputQueue[i];
     switch (inputEvent.type) {
-      case 'mousemove':
+      case "mousemove":
         hasMouseMove = true;
         mouseMoveX += inputEvent.dx;
         mouseMoveY += inputEvent.dy;
         break;
-      case 'mousedown':
-      case 'mouseup':
-        mouseButtonState = inputEvent.type === 'mousedown' ? 1 : 0;
+      case "mousedown":
+      case "mouseup":
+        mouseButtonState = inputEvent.type === "mousedown" ? 1 : 0;
         break;
-      case 'keydown':
-      case 'keyup':
+      case "keydown":
+      case "keyup":
         if (hasKeyEvent) {
           remainingKeyEvents.push(inputEvent);
           break;
         }
         hasKeyEvent = true;
-        keyState = inputEvent.type === 'keydown' ? 1 : 0;
+        keyState = inputEvent.type === "keydown" ? 1 : 0;
         keyCode = inputEvent.keyCode;
         break;
     }
@@ -77,24 +77,24 @@ function tryToSendInput() {
   inputQueue = remainingKeyEvents;
 }
 
-canvas.addEventListener('mousemove', function (event) {
-  inputQueue.push({ type: 'mousemove', dx: event.offsetX, dy: event.offsetY });
+canvas.addEventListener("mousemove", function (event) {
+  inputQueue.push({ type: "mousemove", dx: event.offsetX, dy: event.offsetY });
 });
 
-canvas.addEventListener('mousedown', function (event) {
-  inputQueue.push({ type: 'mousedown' });
+canvas.addEventListener("mousedown", function (event) {
+  inputQueue.push({ type: "mousedown" });
 });
 
-canvas.addEventListener('mouseup', function (event) {
-  inputQueue.push({ type: 'mouseup' });
+canvas.addEventListener("mouseup", function (event) {
+  inputQueue.push({ type: "mouseup" });
 });
 
-window.addEventListener('keydown', function (event) {
-  inputQueue.push({ type: 'keydown', keyCode: event.keyCode });
+window.addEventListener("keydown", function (event) {
+  inputQueue.push({ type: "keydown", keyCode: event.keyCode });
 });
 
-window.addEventListener('keyup', function (event) {
-  inputQueue.push({ type: 'keyup', keyCode: event.keyCode });
+window.addEventListener("keyup", function (event) {
+  inputQueue.push({ type: "keyup", keyCode: event.keyCode });
 });
 
 module.exports = {
@@ -103,5 +103,5 @@ module.exports = {
   inputBufferView,
   InputBufferAddresses,
   inputQueue,
-  tryToSendInput
-}
+  tryToSendInput,
+};

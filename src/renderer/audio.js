@@ -1,4 +1,4 @@
-const { LockStates } = require('./atomics');
+const { LockStates } = require("./atomics");
 
 var audio = {
   channels: 1,
@@ -62,7 +62,7 @@ function openAudio() {
     var sizeSamples = sizeBytes / audio.bytesPerSample; // How many samples fit in the callback buffer?
     var sizeSamplesPerChannel = sizeSamples / audio.channels; // How many samples per a single channel fit in the cb buffer?
     if (sizeSamplesPerChannel != audio.samples) {
-      throw 'Received mismatching audio buffer size!';
+      throw "Received mismatching audio buffer size!";
     }
     // Allocate new sound buffer to be played.
     var source = audioContext.createBufferSource();
@@ -88,11 +88,11 @@ function openAudio() {
 
     // assertion
     if (curtime > audio.nextPlayTime && audio.nextPlayTime != 0) {
-      console.log(
-        'warning: Audio callback had starved sending audio by ' +
-        (curtime - audio.nextPlayTime) +
-        ' seconds.'
-      );
+      // console.log(
+      //   "warning: Audio callback had starved sending audio by " +
+      //     (curtime - audio.nextPlayTime) +
+      //     " seconds."
+      // );
     }
 
     // Don't ever start buffer playbacks earlier from current time than a given constant 'audio.bufferingDelay', since a browser
@@ -120,10 +120,10 @@ function openAudio() {
         audio.gotFirstBlock &&
         Date.now() - getBlockBufferLastWarningTime > 5000
       ) {
-        console.warn(
-          `UI thread tried to read audio data from worker-locked chunk ${getBlockBufferWarningCount} times`
-        );
-        console.log('curChunkIndex', curChunkIndex);
+        // console.warn(
+        //   `UI thread tried to read audio data from worker-locked chunk ${getBlockBufferWarningCount} times`
+        // );
+        //console.log("curChunkIndex", curChunkIndex);
         // debugger
         getBlockBufferLastWarningTime = Date.now();
         getBlockBufferWarningCount = 0;
@@ -154,11 +154,13 @@ function openAudio() {
     for (var c = 0; c < audio.channels; ++c) {
       var channelData = dstAudioBuffer.getChannelData(c);
       if (channelData.length != blockSize) {
-        throw 'Web Audio output buffer length mismatch! Destination size: ' +
-        channelData.length +
-        ' samples vs expected ' +
-        blockSize +
-        ' samples!';
+        throw (
+          "Web Audio output buffer length mismatch! Destination size: " +
+          channelData.length +
+          " samples vs expected " +
+          blockSize +
+          " samples!"
+        );
       }
       var blockBufferI16 = new Int16Array(blockBuffer.buffer);
 
@@ -182,7 +184,7 @@ function openAudio() {
       if (
         secsUntilNextPlayStart >=
         audio.bufferingDelay +
-        audio.bufferDurationSecs * audio.numSimultaneouslyQueuedBuffers
+          audio.bufferDurationSecs * audio.numSimultaneouslyQueuedBuffers
       )
         return;
 
@@ -234,5 +236,5 @@ module.exports = {
   audioContext,
   audioBlockChunkSize,
   AUDIO_DATA_BUFFER_SIZE,
-  openAudio
-}
+  openAudio,
+};

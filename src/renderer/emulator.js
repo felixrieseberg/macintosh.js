@@ -1,9 +1,7 @@
-const { drawScreen } = require('./screen');
-const { openAudio } = require('./audio');
-const { tryToSendInput } = require('./input');
-const { registerWorker } = require('./worker');
-
-registerWorker();
+const { drawScreen } = require("./screen");
+const { openAudio } = require("./audio");
+const { tryToSendInput } = require("./input");
+const { registerWorker } = require("./worker");
 
 function asyncLoop() {
   drawScreen();
@@ -12,6 +10,7 @@ function asyncLoop() {
 }
 
 function start() {
+  registerWorker();
   openAudio();
   asyncLoop();
 }

@@ -1,0 +1,52 @@
+@import "base.css";
+
+canvas {
+  cursor: none;
+}
+
+.controls {
+  text-align: center;
+  margin-top: 5px;
+  background-color: #000;
+  width: 800px;
+  -webkit-app-region: drag;
+  height: 24px;
+  color: #020202;
+  background-image: url(../images/tile_bg_end.png), url(../images/tile_bg_end_right.png), url(../images/tile_bg.png);
+  background-position: left, right, center;
+  background-repeat: no-repeat, no-repeat, repeat-x;
+  background-size: contain;
+  font-size: 12px;
+}
+
+.controls .clear {
+  display: inline-block;
+  height: calc(100% - 3px);
+  background-image: url(../images/tile_clear_bg.png);
+  background-repeat: repeat-x;
+  background-size: contain;
+  padding-top: 3px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.controls a {
+  font-weight: bold;
+  text-decoration: none;
+  -webkit-app-region: none;
+  color: #000;
+}
+
+.controls a:hover {
+  text-decoration: underline;
+}
+
+#warning {
+  height: 150px;
+  width: 350px;
+  background: #ddd;
+  z-index: 100;
+  position: absolute;
+  top: 200px;
+  left: 225px
+}

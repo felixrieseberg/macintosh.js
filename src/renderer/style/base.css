@@ -1,0 +1,15 @@
+@font-face {
+  font-family: Garamond;
+  src: url(garamond.ttf);
+}
+
+body {
+  font-family: Garamond, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  margin: 0 auto;
+  padding: 0;
+}
+
+:root {
+  --canvas-width: 800px;
+  --canvas-height: 600px;
+}

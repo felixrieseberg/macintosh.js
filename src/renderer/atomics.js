@@ -42,5 +42,5 @@ module.exports = {
   releaseTwoStateLock,
   acquireLock,
   releaseLock,
-  LockStates
-}
+  LockStates,
+};

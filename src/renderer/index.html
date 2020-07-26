@@ -3,14 +3,18 @@
   <head>
     <meta charset="UTF-8">
     <title>Hello World!</title>
-    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="style/index.css">
   </head>
   <body>
     <canvas id="canvas" width="800" height="600" oncontextmenu="event.preventDefault()"></canvas>
     <div class="controls">
       <div class="clear">
-        <a id="close" href="#">Quit</a> - <a id="credits" href="#">Credits</a>
+        <a id="close" href="#">Quit</a>
+        <a id="credits" href="#" onclick="window.open('credits.html')">Credits</a>
+        <a id="devtools" href="#">Dev</a>
       </div>
+    </div>
+    <div id="warning">
     </div>
     <script src="./controls.js"></script>
     <script src="./emulator.js"></script>
