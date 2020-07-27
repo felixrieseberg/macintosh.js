@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Help</title>
+  <link rel="stylesheet" href="style/help.css">
+</head>
+<body>
+  <h1>Help</h1>
+
+  <h2>Passing files into the machine</h2>
+
+  <p>
+    <ul>
+      <li>Open the folder "macintosh.js" in your <a href="#_" id="user_dir">user directory</a>.</li>
+      <li>Put any files you want to use in your VM (virtual machine) into that folder.</li>
+      <li>Restart the app.</li>
+      <li>On the VM's (virtual machine) desktop, find the "Unix" volume and double-click to open it.</li>
+      <li>Find the "macintosh.js" folder, which now contains all your files.</li>
+    </ul>
+
+    Files will be copied over when you start your VM (virtual machine). They are not synchronized while the VM is running. However, any changes made to the "macintosh.js" folder in your VM will be saved to the corresponding folder in your home directory once you shut the VM down.
+  </p>
+
+  <h2>Getting files out of machine</h2>
+
+  <p>
+    <ul>
+      <li>On the VM's (virtual machine) desktop, find the "Unix" volume and double-click to open it.</li>
+      <li>Find the "macintosh.js" folder.</li>
+      <li>Copy any files you want to move out of your VM into that folder.</li>
+      <li>Shut the VM down. The app will now copy all files into <a href="#_" id="user_dir2">the "macintosh.js" folder in your user directory</a>.</li>
+    </ul>
+  </p>
+
+  <h2>Developer Tools</h2>
+
+  <p>
+    If you're curious, you can enable developer tools. They will automatically open when you start the app. Some transparency features
+    will break. Restart the app for this change to take effect.
+
+    <button id="devtools">Enable developer tools</button>
+  </p>
+
+  <script>
+    require('./help.js')
+  </script>
+</body>
+</html>

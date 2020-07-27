@@ -89,6 +89,6 @@ typings/
 out/
 
 # Custom stuff
-src/basilisk/user_data
+src/basilisk/user_files
 src/basilisk/disk
 

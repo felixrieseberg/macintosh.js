@@ -1,7 +1,7 @@
 const { app, BrowserWindow, shell } = require("electron");
 const path = require("path");
 
-const { isDevMode } = require("./devmode");
+const { getIsDevMode } = require("./devmode");
 
 const windowList = {};
 let mainWindow;
@@ -42,7 +42,7 @@ function handleNewWindow(event, url, frameName, disposition, options) {
   newWindow.setMenu(null);
   windowList[url] = newWindow;
 
-  if (isDevMode) {
+  if (getIsDevMode()) {
     newWindow.webContents.toggleDevTools();
   }
 
@@ -78,7 +78,7 @@ function createWindow() {
   // Ensure we create child windows with the correct settings
   mainWindow.webContents.on("new-window", handleNewWindow);
 
-  if (isDevMode) {
+  if (getIsDevMode()) {
     mainWindow.webContents.toggleDevTools();
   }
 }

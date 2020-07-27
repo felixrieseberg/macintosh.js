@@ -16,6 +16,10 @@ body {
   text-align: center;
 }
 
+* {
+  user-select: none;
+}
+
 a {
   color: #3366CC;
 }

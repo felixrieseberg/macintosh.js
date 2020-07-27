@@ -14,7 +14,6 @@ const {
   AUDIO_DATA_BUFFER_SIZE,
 } = require("./audio");
 const { quit } = require("./ipc");
-const { isDevMode } = require("../main/devmode");
 
 let isWorkerRunning = false;
 let isWorkerSaving = false;
@@ -40,9 +39,7 @@ function handleDiskSaved() {
   isWorkerSaving = false;
 
   // We're just gonna quit
-  if (!isDevMode) {
-    quit();
-  }
+  quit();
 }
 
 async function handleWorkerShutdown() {
