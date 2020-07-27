@@ -1,5 +1,6 @@
 const { inputBuffer, INPUT_BUFFER_SIZE } = require("./input");
 const { videoModeBuffer, VIDEO_MODE_BUFFER_SIZE } = require("./video");
+const { setCanvasBlank } = require("./screen");
 const {
   screenBuffer,
   SCREEN_BUFFER_SIZE,
@@ -12,6 +13,43 @@ const {
   audioBlockChunkSize,
   AUDIO_DATA_BUFFER_SIZE,
 } = require("./audio");
+const { quit } = require("./ipc");
+
+let isWorkerRunning = false;
+let isWorkerSaving = false;
+let worker;
+
+function getIsWorkerRunning() {
+  return isWorkerRunning;
+}
+
+function getIsWorkerSaving() {
+  return isWorkerSaving;
+}
+
+function saveDisk() {
+  isWorkerSaving = true;
+  document.querySelector("#disk_saving").classList.remove("hidden");
+  worker.postMessage("disk_save");
+}
+
+function handleDiskSaved() {
+  isWorkerSaving = false;
+
+  // We're just gonna quit
+  quit();
+}
+
+async function handleWorkerShutdown() {
+  console.log(`Handling worker shutdown`);
+
+  document.body.classList.remove("emulator_running");
+
+  // Then, update the canvas
+  await setCanvasBlank();
+
+  saveDisk();
+}
 
 function registerWorker() {
   var workerConfig = {
@@ -29,7 +67,12 @@ function registerWorker() {
     SCREEN_HEIGHT: SCREEN_HEIGHT,
   };
 
-  var worker = window.emulatorWorker = new Worker("../basilisk/BasiliskII-worker-boot.js");
+  worker = window.emulatorWorker = new Worker(
+    "../basilisk/BasiliskII-worker-boot.js"
+  );
+
+  // We'll need this info
+  isWorkerRunning = true;
 
   worker.postMessage(workerConfig);
   worker.onmessage = function (e) {
@@ -51,23 +94,26 @@ function registerWorker() {
       // }
     }
 
-    if (e.data.type === 'TTY') {
+    if (e.data.type === "TTY") {
       // If we're shutting down, Basilisk II will send
       // close_audio to TTY - our signal that we can
       // save the disk image
-      if (e.data.message === 'close_audio') {
-        worker.postMessage('save');
+      if (e.data.data === "close_audio") {
+        handleWorkerShutdown();
       }
+    }
+
+    if (e.data.type === "disk_saved") {
+      handleDiskSaved();
     }
   };
 }
 
-function saveDisk() {
-
-
-  worker.postMessage('save');
-}
+window.setCanvasBlank = setCanvasBlank;
 
 module.exports = {
   registerWorker,
+  getIsWorkerRunning,
+  getIsWorkerSaving,
+  setCanvasBlank,
 };

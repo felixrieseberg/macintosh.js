@@ -2,19 +2,44 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>Hello World!</title>
+    <title>macintosh.js</title>
     <link rel="stylesheet" href="style/index.css">
   </head>
-  <body>
+  <body class="emulator_running">
     <canvas id="canvas" width="800" height="600" oncontextmenu="event.preventDefault()"></canvas>
-    <div class="controls">
+    <div id="disk_saving" class="dialog absolute_center hidden">
+      <p>Saving virtual machine disk.</p>
+      <p>We'll quit once done.</p>
+      <div class="lds-spinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+    </div>
+    <div class="controls garamond">
       <div class="clear">
         <a id="close" href="#">Quit</a>
         <a id="credits" href="#" onclick="window.open('credits.html')">Credits</a>
         <a id="devtools" href="#">Dev</a>
       </div>
     </div>
-    <div id="warning">
+    <div id="warning" class="dialog hidden absolute_center">
+      <div>
+        <h1><img src="images/important_note.png" /> Don't lose your data!</h1>
+        <p>
+          Warning: <strong>All changes to your virtual Macintosh will be lost</strong>
+          unless you shut down the virtual machine.
+        </p>
+        <p>
+          Click on the <img width="17" src="images/finder_icon.png" /> icon
+          in the upper right and select "Finder". Then, in the menu bar at the
+          top of the screen, click on "Special" and select "Shut Down".
+        </p>
+
+        <button id="warning-quit">
+          Quit anyway
+        </button>
+
+        <button id="warning-cancel">
+          Cancel
+        </button>
+      </div>
     </div>
     <script src="./controls.js"></script>
     <script src="./emulator.js"></script>

@@ -1,29 +1,8 @@
-const fs = require('fs');
-const path = require('path');
+const fs = require("fs");
+const path = require("path");
 
 const memAllocSet = new Set();
 const memAllocSetPersistent = new Set();
-
-function memAllocAdd(addr) {
-  if (memAllocSet.has(addr)) {
-    console.error(`unfreed memory alloc'd at ${addr}`);
-  }
-  memAllocSet.add(addr);
-  console.warn('malloc', addr);
-  memAllocSetPersistent.add(addr);
-}
-
-function memAllocRemove(addr) {
-  if (!memAllocSet.has(addr)) {
-    console.error(
-      `unalloc'd memory free'd at ${addr} (everallocd=${memAllocSetPersistent.has(
-        addr
-      )})`
-    );
-  }
-  console.warn('free', addr);
-  memAllocSet.delete(addr);
-}
 
 var pathGetFilenameRegex = /\/([^\/]+)$/;
 
@@ -37,10 +16,10 @@ function pathGetFilename(path) {
 }
 
 function addAutoloader(module) {
-  var loadDatafiles = function() {
-    module.autoloadFiles.forEach(function(filepath) {
+  var loadDatafiles = function () {
+    module.autoloadFiles.forEach(function (filepath) {
       module.FS_createPreloadedFile(
-        '/',
+        "/",
         pathGetFilename(filepath),
         filepath,
         true,
@@ -61,10 +40,10 @@ function addCustomAsyncInit(module) {
   if (module.asyncInit) {
     module.preRun = module.preRun || [];
     module.preRun.push(function waitForCustomAsyncInit() {
-      module.addRunDependency('__moduleAsyncInit');
+      module.addRunDependency("__moduleAsyncInit");
 
       module.asyncInit(module, function asyncInitCallback() {
-        module.removeRunDependency('__moduleAsyncInit');
+        module.removeRunDependency("__moduleAsyncInit");
       });
     });
   }
@@ -90,21 +69,25 @@ var LockStates = {
 
 var Module = null;
 
-self.onmessage = function(msg) {
-  console.log('Worker message received', msg.data);
+self.onmessage = function (msg) {
+  console.log("Worker message received", msg.data);
 
   // If it's a config object, start the show
   if (msg && msg.data && msg.data.SCREEN_WIDTH) {
-    console.log('Start emulator worker');
-    startEmulator(Object.assign({}, msg.data, {singleThreadedEmscripten: true}));
+    console.log("Start emulator worker");
+    startEmulator(
+      Object.assign({}, msg.data, { singleThreadedEmscripten: true })
+    );
   }
 
-  if (msg && msg.data === 'save') {
-    const diskData = Module.FS.readFile('/disk');
-    const diskPath = path.join(__dirname, 'disk');
+  if (msg && msg.data === "disk_save") {
+    const diskData = Module.FS.readFile("/disk");
+    const diskPath = path.join(__dirname, "disk");
 
     fs.writeFile(diskPath, diskData, (error) => {
       console.log(`Finished writing disk`);
+
+      postMessage({ type: "disk_saved" });
 
       if (error) {
         console.error(error);
@@ -140,20 +123,6 @@ function startEmulator(parentConfig) {
   );
 
   function waitForTwoStateLock(bufferView, lockIndex) {
-    // Atomics.wait(
-    //   bufferView,
-    //   lockIndex,
-    //   LockStates.UI_THREAD_LOCK
-    // );
-
-    // while (!tryToAcquireCyclicalLock(bufferView, lockIndex)) {
-    //   // spin
-    // }
-    // if (!tryToAcquireCyclicalLock(bufferView, lockIndex)) {
-    //   throw new Error('failed to acquire lock for index', lockIndex);
-    // }
-    //
-    //
     if (Atomics.load(bufferView, lockIndex) === LockStates.UI_THREAD_LOCK) {
       while (
         Atomics.compareExchange(
@@ -217,9 +186,9 @@ function startEmulator(parentConfig) {
   var AudioBufferQueue = [];
 
   Module = {
-    autoloadFiles: ['disk', 'rom', 'prefs'],
+    autoloadFiles: ["disk", "rom", "prefs"],
 
-    arguments: ['--config', 'prefs'],
+    arguments: ["--config", "prefs"],
     canvas: null,
 
     blit: function blit(bufPtr, width, height, depth, usingPalette) {
@@ -266,7 +235,7 @@ function startEmulator(parentConfig) {
 
       if (audioDataBufferView[writingChunkAddr] === LockStates.UI_THREAD_LOCK) {
         console.warn(
-          'worker tried to write audio data to UI-thread-locked chunk',
+          "worker tried to write audio data to UI-thread-locked chunk",
           writingChunkIndex
         );
         return 0;
@@ -279,7 +248,6 @@ function startEmulator(parentConfig) {
       ) {
         nextNextChunkIndex = 0;
       }
-      // console.assert(nextNextChunkIndex != writingChunkIndex, `writingChunkIndex=${nextNextChunkIndex} == nextChunkIndex=${nextNextChunkIndex}`)
 
       audioDataBufferView[writingChunkAddr + 1] = nextNextChunkIndex;
       audioDataBufferView.set(newAudio, writingChunkAddr + 2);
@@ -290,7 +258,7 @@ function startEmulator(parentConfig) {
     },
 
     debugPointer: function debugPointer(ptr) {
-      console.log('debugPointer', ptr);
+      console.log("debugPointer", ptr);
     },
 
     acquireInputLock: acquireInputLock,
@@ -302,23 +270,25 @@ function startEmulator(parentConfig) {
     },
 
     totalDependencies: 0,
-    monitorRunDependencies: function(left) {
+    monitorRunDependencies: function (left) {
       this.totalDependencies = Math.max(this.totalDependencies, left);
 
       if (left == 0) {
-        postMessage({type: 'emulator_ready'});
+        postMessage({ type: "emulator_ready" });
       } else {
         postMessage({
-          type: 'emulator_loading',
+          type: "emulator_loading",
           completion: (this.totalDependencies - left) / this.totalDependencies,
         });
       }
     },
 
     print: (message) => {
+      console.log(message);
+
       postMessage({
-        type: 'TTY',
-        data: message
+        type: "TTY",
+        data: message,
       });
     },
 
@@ -332,6 +302,6 @@ function startEmulator(parentConfig) {
   addCustomAsyncInit(Module);
 
   if (parentConfig.singleThreadedEmscripten) {
-    importScripts('BasiliskII.js');
+    importScripts("BasiliskII.js");
   }
 }

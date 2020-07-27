@@ -1,7 +1,7 @@
 const { app, BrowserWindow, shell } = require("electron");
 const path = require("path");
 
-const { isDevMode } = require('./devmode')
+const { isDevMode } = require("./devmode");
 
 const windowList = {};
 let mainWindow;
@@ -26,14 +26,14 @@ function handleNewWindow(event, url, frameName, disposition, options) {
     resizable: true,
     webPreferences: {
       nodeIntegration: false,
-      navigateOnDragDrop: false
+      navigateOnDragDrop: false,
     },
   });
 
-  let newWindow = new BrowserWindow(options)
+  let newWindow = new BrowserWindow(options);
 
-  newWindow.webContents.on('will-navigate', (event, url) => {
-    if (url.startsWith('http')) {
+  newWindow.webContents.on("will-navigate", (event, url) => {
+    if (url.startsWith("http")) {
       event.preventDefault();
       shell.openExternal(url);
     }
@@ -47,7 +47,7 @@ function handleNewWindow(event, url, frameName, disposition, options) {
     newWindow.webContents.toggleDevTools();
   }
 
-  newWindow.on('closed', () => {
+  newWindow.on("closed", () => {
     delete windowList[url];
   });
 }
@@ -66,7 +66,7 @@ function createWindow() {
       nativeWindowOpen: true,
       navigateOnDragDrop: false,
       nodeIntegrationInWorker: true,
-      sandbox: false
+      sandbox: false,
     },
   });
 
@@ -82,8 +82,8 @@ function createWindow() {
   if (isDevMode) {
     mainWindow.webContents.toggleDevTools();
   }
-};
+}
 
 module.exports = {
-  createWindow
-}
+  createWindow,
+};

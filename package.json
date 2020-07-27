@@ -1,16 +1,16 @@
 {
-  "name": "macintosh",
-  "productName": "macintosh",
+  "name": "macintosh.js",
+  "productName": "macintosh.js",
   "version": "1.0.0",
-  "description": "Macintosh's System 7 in an Electron app. I'm sorry.",
+  "description": "Macintosh's System 8 in an Electron app. I'm sorry.",
   "main": "src/main/index.js",
   "scripts": {
     "start": "electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
-    "lint": "npx prettier --check src/{main,renderer}/*.js",
-    "fix": "npx prettier --write src/{main,renderer}/*.js"
+    "lint": "npx prettier --check src/{main,renderer}/*.{js,css}",
+    "fix": "npx prettier --write src/{main,renderer}/*.{js,css}"
   },
   "keywords": [],
   "author": {

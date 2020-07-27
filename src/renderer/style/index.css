@@ -1,6 +1,12 @@
 @import "base.css";
+@import "spinner.css";
 
-canvas {
+:root {
+  --warning-height: 250px;
+  --warning-width: 600px;
+}
+
+.emulator_running canvas {
   cursor: none;
 }
 
@@ -17,6 +23,8 @@ canvas {
   background-repeat: no-repeat, no-repeat, repeat-x;
   background-size: contain;
   font-size: 12px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .controls .clear {
@@ -41,12 +49,10 @@ canvas {
   text-decoration: underline;
 }
 
+.emulator_running #turned_off {
+  display: none;
+}
+
 #warning {
-  height: 150px;
-  width: 350px;
-  background: #ddd;
-  z-index: 100;
-  position: absolute;
-  top: 200px;
-  left: 225px
+  width: var(--warning-width);
 }

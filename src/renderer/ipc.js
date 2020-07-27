@@ -7,5 +7,5 @@ module.exports = {
 
   devtools() {
     ipcRenderer.invoke("devtools");
-  }
+  },
 };
