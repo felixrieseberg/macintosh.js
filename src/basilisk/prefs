@@ -1,12 +1,11 @@
-disk system7.img
-disk DCImage.img
+disk disk
 extfs /
 screen win/800/600
 seriala
 serialb
 udptunnel false
 udpport 6066
-rom Quadra-650.rom
+rom rom
 bootdrive 0
 bootdriver 0
 ramsize 268435456
@@ -14,7 +13,7 @@ frameskip 1
 modelid 14
 cpu 4
 fpu true
-nocdrom true
+nocdrom false
 nosound false
 noclipconversion false
 nogui true
