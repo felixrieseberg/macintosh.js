@@ -11,19 +11,19 @@ This is Mac OS 8, running in an [Electron](https://electronjs.org/) app. Yes, it
 ![Screenshot]()
 
 ## Does it work?
-Yes! Quite well, actually - on macOS, Windows, and Linux. Bear in mind that this is written entirely in JavaScript, so please adjust your expectations. The virtual machine is emulating a Motorola CPU, which Apple used before switching to IBM's PowerPC architecture in the late 1990s.
+Yes! Quite well, actually - on macOS, Windows, and Linux. Bear in mind that this is written entirely in JavaScript, so please adjust your expectations. The virtual machine is emulating a 1991 Macintosh Quadra 900 with a Motorola CPU, which Apple used before switching to IBM's PowerPC architecture in the late 1990s.
 
 ## Should this have been a native app?
 Absolutely.
 
 ## Does it run my favorite game or app?
-You'll likely be better off with an actual virtualization app, but the short answer is yes. In fact, you'll find various games and demos preinstalled, thanks to an old MacWorld Demo CD from 1997. Namely, Oregon Trail, Duke Nukem 3D, Civilization II, Alley 19 Bowling, Damage Incorporated, and Dungeons & Dragons.
+The short answer is "Yes". In fact, you'll find various games and demos preinstalled, thanks to an old MacWorld Demo CD from 1997. Namely, Oregon Trail, Duke Nukem 3D, Civilization II, Alley 19 Bowling, Damage Incorporated, and Dungeons & Dragons.
 
 There are also various apps and trials preinstalled, including Photoshop 3, Premiere 4, Illustrator 5.5, StuffIt Expander, the Apple Web Page Construction Kit, and more.
 
 ## Can I transfer files from and to the machine?
 
-Yes, you can. Click on the "Help" button at the bottom of the running app to see instructions.
+Yes, you can. Click on the "Help" button at the bottom of the running app to see instructions. You can transfer files directly - or mount disk images.
 
 ## Can I connect to the Internet?
 

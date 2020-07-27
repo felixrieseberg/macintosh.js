@@ -22,16 +22,21 @@ function addAutoloader(module) {
     try {
       const absoluteSourcePath = path.join(macDir, sourcePath);
       const absoluteTargetPath = path.join(macintoshCopyPath, sourcePath);
-      const targetPath = `/macintosh.js${sourcePath ? `/${sourcePath}` : '' }`;
-      const files = fs.readdirSync(absoluteSourcePath);
+      const targetPath = `/macintosh.js${sourcePath ? `/${sourcePath}` : ""}`;
+      const files = fs.readdirSync(absoluteSourcePath).filter((v) => {
+        // Remove iso and img files
+        return !v.endsWith(".iso") && !v.endsWith(".img");
+      });
 
       (files || []).forEach((fileName) => {
         try {
           // If not, let's move on
           const fileSourcePath = path.join(absoluteSourcePath, fileName);
           const copyPath = path.join(absoluteTargetPath, fileName);
-          const relativeSourcePath = `${sourcePath ? `${sourcePath}/` : ''}${fileName}`;
-          const fileUrl = `user_files/${relativeSourcePath}`
+          const relativeSourcePath = `${
+            sourcePath ? `${sourcePath}/` : ""
+          }${fileName}`;
+          const fileUrl = `user_files/${relativeSourcePath}`;
 
           // Check if directory
           if (fs.statSync(fileSourcePath).isDirectory()) {
@@ -63,9 +68,9 @@ function addAutoloader(module) {
           );
         } catch (error) {
           postMessage("showMessageBoxSync", {
-            type: 'error',
-            title: 'Could not transfer file',
-            message: `We tried to transfer ${fileName} to the virtual machine, but failed. The error was: ${error}`
+            type: "error",
+            title: "Could not transfer file",
+            message: `We tried to transfer ${fileName} to the virtual machine, but failed. The error was: ${error}`,
           });
 
           console.error(`loadDatafiles: Failed to preload ${fileName}`, error);
@@ -73,20 +78,25 @@ function addAutoloader(module) {
       });
     } catch (error) {
       postMessage("showMessageBoxSync", {
-        type: 'error',
-        title: 'Could not transfer files',
-        message: `We tried to transfer files to the virtual machine, but failed. The error was: ${error}`
+        type: "error",
+        title: "Could not transfer files",
+        message: `We tried to transfer files to the virtual machine, but failed. The error was: ${error}`,
       });
 
       console.error(`loadDatafiles: Failed to copyFilesAtPath`, error);
     }
-  }
+  };
 
   const loadDatafiles = function () {
     module.autoloadFiles.forEach((filepath) => {
+      const parent = `/`;
+      const name = path.basename(filepath);
+
+      console.log(`Adding preload file`, { parent, name, url: filepath });
+
       module.FS_createPreloadedFile(
-        "/",
-        path.basename(filepath),
+        parent,
+        name,
         filepath,
         true,
         true
@@ -99,7 +109,7 @@ function addAutoloader(module) {
       return;
     }
 
-    copyFilesAtPath('');
+    copyFilesAtPath("");
   };
 
   if (module.autoloadFiles) {
@@ -128,9 +138,9 @@ function writeSafely(filePath, fileData) {
     fs.writeFile(filePath, fileData, (error) => {
       if (error) {
         postMessage("showMessageBoxSync", {
-          type: 'error',
-          title: 'Could not save files',
-          message: `We tried to save files from the virtual machine, but failed. The error was: ${error}`
+          type: "error",
+          title: "Could not save files",
+          message: `We tried to save files from the virtual machine, but failed. The error was: ${error}`,
         });
 
         console.error(`Disk save: Encountered error for ${filePath}`, error);
@@ -141,6 +151,102 @@ function writeSafely(filePath, fileData) {
       resolve();
     });
   });
+}
+
+function getPrefs(userImages = []) {
+  try {
+    const prefsTemplatePath = path.join(__dirname, "prefs_template");
+    const prefsPath = path.join(__dirname, "prefs");
+    let prefs = fs.readFileSync(prefsTemplatePath, { encoding: "utf-8" });
+
+    if (userImages && userImages.length > 0) {
+      console.log(`getPrefs: Found ${userImages.length} user images`);
+      userImages.forEach((file) => {
+        if (file.endsWith(".iso")) {
+          prefs += `\ncdrom ${file}`;
+        } else if (file.endsWith(".img")) {
+          prefs += `\ndisk ${file}`;
+        }
+      });
+    }
+
+    prefs += `\n`;
+
+    fs.writeFileSync(prefsPath, prefs);
+  } catch (error) {
+    console.error(`getPrefs: Failed to set prefs`, error);
+  }
+
+  return "prefs";
+}
+
+function isMacDirFileOfType(extension = '', v = '') {
+  const isType = v.endsWith(`.${extension}`);
+  const isMatch = isType && fs.statSync(path.join(macDir, v)).isFile();
+
+  console.log(`isMacDirFileOfType: ${v} is file and ${extension}: ${isMatch}`);
+  return isMatch;
+}
+
+function copyUserImages() {
+  const result = [];
+
+  try {
+    // No need if the macDir doesn't exist
+    if (!fs.existsSync(macDir)) {
+      console.log(`autoMountImageFiles: ${macDir} does not exist, exit`);
+      return result;
+    }
+
+    const macDirFiles = fs.readdirSync(macDir);
+    const imgFiles = macDirFiles.filter((v) => isMacDirFileOfType('img', v));
+    const isoFiles = macDirFiles.filter((v) => isMacDirFileOfType('iso', v));
+    const isoImgFiles = [...isoFiles, ...imgFiles];
+
+    console.log(`copyUserImages: iso and img files`, isoImgFiles);
+
+    isoImgFiles.forEach((fileName, i) => {
+      const sourcePath = path.join(macDir, fileName);
+      const sanitizedFileName = `user_image_${i}_${fileName.replace(/[^\w\s\.]/gi, '')}`;
+      const targetPath = path.join(__dirname, sanitizedFileName);
+
+      if (fs.existsSync(targetPath)) {
+        const sourceStat = fs.statSync(sourcePath);
+        const targetStat = fs.statSync(targetPath);
+
+        // Copy if the length is different
+        if (sourceStat.size !== targetStat.size) {
+          fs.copyFileSync(sourcePath, targetPath);
+        } else {
+          console.log(
+            `autoMountImageFiles: ${sourcePath} already exists in ${targetPath}, not copying`
+          );
+        }
+      } else {
+        fs.copyFileSync(sourcePath, targetPath);
+      }
+
+      console.log(`Copied over ${targetPath}`);
+      result.push(sanitizedFileName);
+    });
+
+    // Delete all old files
+    const imagesCopyFiles = fs.readdirSync(__dirname);
+    imagesCopyFiles.forEach((v) => {
+      if (v.startsWith('user_image_') && !result.includes(v)) {
+        fs.unlinkSync(path.join(__dirname, v));
+      }
+    });
+  } catch (error) {
+    console.error(`copyUserImages: Encountered error`, error);
+  }
+
+  return result;
+}
+
+function getAutoLoadFiles(userImages = []) {
+  const autoLoadFiles = ["disk", "rom", "prefs", ...userImages];
+  return autoLoadFiles;
 }
 
 async function saveFilesInPath(folderPath) {
@@ -177,9 +283,9 @@ async function saveFilesInPath(folderPath) {
       }
     } catch (error) {
       postMessage("showMessageBoxSync", {
-        type: 'error',
-        title: 'Could not safe file',
-        message: `We tried to save the file "${file}" from the virtual machine, but failed. The error was: ${error}`
+        type: "error",
+        title: "Could not safe file",
+        message: `We tried to save the file "${file}" from the virtual machine, but failed. The error was: ${error}`,
       });
 
       console.error(`Disk save: Could not write ${file}`, error);
@@ -328,20 +434,18 @@ function startEmulator(parentConfig) {
   }
 
   let AudioConfig = null;
-
   let AudioBufferQueue = [];
+  const userImages = copyUserImages();
 
   Module = {
-    autoloadFiles: ["disk", "rom", "prefs"],
+    autoloadFiles: getAutoLoadFiles(userImages),
 
-    arguments: ["--config", "prefs"],
+    userImages: userImages,
+
+    arguments: ["--config", getPrefs(userImages)],
     canvas: null,
 
     blit: function blit(bufPtr, width, height, depth, usingPalette) {
-      // console.time('await worker video lock');
-      // waitForTwoStateLock(videoModeBufferView, 9);
-      // console.timeEnd('await worker video lock');
-
       videoModeBufferView[0] = width;
       videoModeBufferView[1] = height;
       videoModeBufferView[2] = depth;
@@ -370,11 +474,6 @@ function startEmulator(parentConfig) {
 
     enqueueAudio: function enqueueAudio(bufPtr, nbytes, type) {
       let newAudio = Module.HEAPU8.slice(bufPtr, bufPtr + nbytes);
-      // console.assert(
-      //   nbytes == parentConfig.audioBlockBufferSize,
-      //   `emulator wrote ${nbytes}, expected ${parentConfig.audioBlockBufferSize}`
-      // );
-
       let writingChunkIndex = nextAudioChunkIndex;
       let writingChunkAddr =
         writingChunkIndex * parentConfig.audioBlockChunkSize;

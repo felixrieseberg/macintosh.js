@@ -12,7 +12,7 @@ module.exports = {
     appCategoryType: 'public.app-category.developer-tools',
     win32metadata: {
       CompanyName: 'Felix Rieseberg',
-      OriginalFilename: 'macintosh.js'
+      OriginalFilename: 'macintoshjs'
     },
     osxSign: {
       identity: 'Developer ID Application: Felix Rieseberg (LT94ZKYDCJ)',
@@ -41,7 +41,7 @@ module.exports = {
         return {
           name: 'macintosh.js',
           authors: 'Felix Rieseberg',
-          exe: 'macintoshjs.exe',
+          exe: 'macintosh.js.exe',
           noMsi: true,
           remoteReleases: '',
           setupExe: `macintoshjs-${package.version}-setup-${arch}.exe`,
