@@ -87,3 +87,8 @@ typings/
 
 # Electron-Forge
 out/
+
+# Custom stuff
+src/basilisk/user_data
+src/basilisk/disk
+
