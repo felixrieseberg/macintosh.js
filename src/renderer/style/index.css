@@ -49,6 +49,21 @@
   text-decoration: underline;
 }
 
+.controls > .clear > a:before {
+  content: "• ";
+  display: inline-block;
+  text-decoration: none;
+  margin-right: 4px;
+}
+
+.controls > .clear > a:before:hover {
+  text-decoration: none;
+}
+
+.controls > .clear > a:nth-of-type(1):before {
+  content: "";
+}
+
 #progress {
   display: none;
 }

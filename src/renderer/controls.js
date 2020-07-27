@@ -1,8 +1,9 @@
 const { quit, devtools } = require("./ipc");
 const { getIsWorkerRunning, getIsWorkerSaving } = require("./worker");
 const { showCloseWarning } = require("./dialogs");
+const { getIsDevMode } = require("./ipc");
 
-function registerControls() {
+async function registerControls() {
   document.querySelector("#close").addEventListener("click", () => {
     if (!getIsWorkerRunning()) {
       quit();
@@ -16,6 +17,10 @@ function registerControls() {
   document.querySelector("#devtools").addEventListener("click", () => {
     devtools();
   });
+
+  if (await getIsDevMode()) {
+    document.querySelector("#devtools").classList.remove("hidden");
+  }
 }
 
 registerControls();

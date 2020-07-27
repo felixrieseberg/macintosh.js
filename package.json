@@ -19,34 +19,11 @@
   },
   "license": "MIT",
   "config": {
-    "forge": {
-      "packagerConfig": {},
-      "makers": [
-        {
-          "name": "@electron-forge/maker-squirrel",
-          "config": {
-            "name": "macintosh"
-          }
-        },
-        {
-          "name": "@electron-forge/maker-zip",
-          "platforms": [
-            "darwin"
-          ]
-        },
-        {
-          "name": "@electron-forge/maker-deb",
-          "config": {}
-        },
-        {
-          "name": "@electron-forge/maker-rpm",
-          "config": {}
-        }
-      ]
-    }
+    "forge": "./forge.config.js"
   },
   "dependencies": {
-    "electron-squirrel-startup": "^1.0.0"
+    "electron-squirrel-startup": "^1.0.0",
+    "update-electron-app": "^1.5.0"
   },
   "devDependencies": {
     "@electron-forge/cli": "6.0.0-beta.52",

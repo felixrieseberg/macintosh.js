@@ -1,5 +1,6 @@
-const { ipcMain, app, BrowserWindow } = require("electron");
+const { ipcMain, app, BrowserWindow, dialog } = require("electron");
 const { setIsDevMode, getIsDevMode } = require("./devmode");
+const { getMainWindow } = require("./windows");
 
 function registerIpcHandlers() {
   ipcMain.handle("quit", () => app.quit());
@@ -12,8 +13,22 @@ function registerIpcHandlers() {
 
   ipcMain.handle("getIsDevMode", () => getIsDevMode());
 
-  ipcMain.handle("setIsDevMode", (event, set) => {
+  ipcMain.handle("setIsDevMode", (_event, set) => {
     setIsDevMode(set);
+  });
+
+  ipcMain.handle("showMessageBox", (_event, options) => {
+    const mainWindow = getMainWindow();
+    return dialog.showMessageBox(mainWindow, options);
+  });
+
+  ipcMain.handle("showMessageBoxSync", (_event, options) => {
+    const mainWindow = getMainWindow();
+    return dialog.showMessageBoxSync(mainWindow, options);
+  });
+
+  ipcMain.handle("getAppVersion", () => {
+    return app.getVersion();
   });
 }
 

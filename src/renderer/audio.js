@@ -4,9 +4,7 @@ var audio = {
   channels: 1,
   bytesPerSample: 2,
   samples: 4096,
-  // freq: 11025,
   freq: 22050,
-  // freq: 44100,
   format: 0x8010,
   paused: false,
   timer: null,
@@ -41,12 +39,6 @@ var audioDataBuffer = new SharedArrayBuffer(AUDIO_DATA_BUFFER_SIZE);
 var audioDataBufferView = new Uint8Array(audioDataBuffer);
 
 var audioContext = new AudioContext();
-// document.querySelector('#enableAudio').addEventListener('click', function() {
-//   audioContext.resume().then(() => {
-//     document.querySelector('#enableAudio').remove();
-//   });
-// });
-
 var gainNode = audioContext.createGain();
 
 gainNode.gain.value = 1;
@@ -120,11 +112,6 @@ function openAudio() {
         audio.gotFirstBlock &&
         Date.now() - getBlockBufferLastWarningTime > 5000
       ) {
-        // console.warn(
-        //   `UI thread tried to read audio data from worker-locked chunk ${getBlockBufferWarningCount} times`
-        // );
-        //console.log("curChunkIndex", curChunkIndex);
-        // debugger
         getBlockBufferLastWarningTime = Date.now();
         getBlockBufferWarningCount = 0;
       }
@@ -139,10 +126,7 @@ function openAudio() {
       curChunkAddr + 2 + audio.bufferSize
     );
     audio.nextChunkIndex = audioDataBufferView[curChunkAddr + 1];
-    // console.assert(audio.nextChunkIndex != curChunkIndex, `curChunkIndex=${curChunkIndex} == nextChunkIndex=${audio.nextChunkIndex}`)
     audioDataBufferView[curChunkAddr] = LockStates.EMUL_THREAD_LOCK;
-    // debugger
-    // console.log(`got buffer=${curChunkIndex}, next=${audio.nextChunkIndex}`)
     return blockBuffer;
   };
 
@@ -196,7 +180,6 @@ function openAudio() {
       // And queue it to be played after the currently playing audio stream.
       audio.pushAudio(blockBuffer, audio.bufferSize);
     }
-    // console.log(`queued ${i} buffers of audio`);
   };
 
   // Create a callback function that will be routinely called to ask more audio data from the user application.

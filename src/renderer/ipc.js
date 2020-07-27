@@ -8,4 +8,16 @@ module.exports = {
   devtools() {
     ipcRenderer.invoke("devtools");
   },
+
+  getIsDevMode() {
+    return ipcRenderer.invoke("getIsDevMode");
+  },
+
+  setIsDevMode() {
+    return ipcRenderer.invoke("setIsDevMode");
+  },
+
+  getAppVersion() {
+    return ipcRenderer.invoke("getAppVersion");
+  },
 };

@@ -8,6 +8,9 @@
 </head>
 <body>
   <h1>Credits</h1>
+
+  <small id="versions"></small>
+
   <p>
     This app by <a href="https://www.felixrieseberg.com">Felix Rieseberg</a>. The real work was done by the people below:
   </p>
@@ -29,14 +32,6 @@
 
   <p>Basilisk II and its components are released under the GNU GPL. See <a href="#" id="license">LICENSE</a> for details.</p>
 
-  <script>
-    license.onclick = () => {
-      const { shell } = require('electron');
-      const path = require('path');
-
-      const licensePath = path.join(__dirname, '../basilisk/LICENSE.txt');
-      shell.openPath(licensePath);
-    }
-  </script>
+  <script src="./credits.js"></script>
 </body>
 </html>

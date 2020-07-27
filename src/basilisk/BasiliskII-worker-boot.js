@@ -62,10 +62,22 @@ function addAutoloader(module) {
             true
           );
         } catch (error) {
+          postMessage("showMessageBoxSync", {
+            type: 'error',
+            title: 'Could not transfer file',
+            message: `We tried to transfer ${fileName} to the virtual machine, but failed. The error was: ${error}`
+          });
+
           console.error(`loadDatafiles: Failed to preload ${fileName}`, error);
         }
       });
     } catch (error) {
+      postMessage("showMessageBoxSync", {
+        type: 'error',
+        title: 'Could not transfer files',
+        message: `We tried to transfer files to the virtual machine, but failed. The error was: ${error}`
+      });
+
       console.error(`loadDatafiles: Failed to copyFilesAtPath`, error);
     }
   }
@@ -115,6 +127,12 @@ function writeSafely(filePath, fileData) {
   return new Promise((resolve) => {
     fs.writeFile(filePath, fileData, (error) => {
       if (error) {
+        postMessage("showMessageBoxSync", {
+          type: 'error',
+          title: 'Could not save files',
+          message: `We tried to save files from the virtual machine, but failed. The error was: ${error}`
+        });
+
         console.error(`Disk save: Encountered error for ${filePath}`, error);
       } else {
         console.log(`Disk save: Finished writing ${filePath}`);
@@ -158,6 +176,12 @@ async function saveFilesInPath(folderPath) {
         );
       }
     } catch (error) {
+      postMessage("showMessageBoxSync", {
+        type: 'error',
+        title: 'Could not safe file',
+        message: `We tried to save the file "${file}" from the virtual machine, but failed. The error was: ${error}`
+      });
+
       console.error(`Disk save: Could not write ${file}`, error);
     }
   }

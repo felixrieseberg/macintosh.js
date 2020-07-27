@@ -9,21 +9,24 @@
 <body>
   <h1>Help</h1>
 
-  <h2>Passing files into the machine</h2>
+  <h2>How can I get files into the machine?</h2>
 
   <p>
     <ul>
       <li>Open the folder "macintosh.js" in your <a href="#_" id="user_dir">user directory</a>.</li>
       <li>Put any files you want to use in your VM (virtual machine) into that folder.</li>
       <li>Restart the app.</li>
-      <li>On the VM's (virtual machine) desktop, find the "Unix" volume and double-click to open it.</li>
+      <li>On the VM's desktop, find the "Unix" volume and double-click to open it.</li>
       <li>Find the "macintosh.js" folder, which now contains all your files.</li>
     </ul>
 
-    Files will be copied over when you start your VM (virtual machine). They are not synchronized while the VM is running. However, any changes made to the "macintosh.js" folder in your VM will be saved to the corresponding folder in your home directory once you shut the VM down.
+    Files will be copied over when you start your VM. They are not synchronized while the VM is running. However, any changes made to the "macintosh.js" folder in your VM will be saved to the corresponding folder in your home directory once you shut the VM down.
+
+    Be chill about it: The more files you put into that folder,
+    the more memory macintosh.js will consume.
   </p>
 
-  <h2>Getting files out of machine</h2>
+  <h2>How can I get files out of the machine?</h2>
 
   <p>
     <ul>
@@ -43,8 +46,6 @@
     <button id="devtools">Enable developer tools</button>
   </p>
 
-  <script>
-    require('./help.js')
-  </script>
+  <script src="./help.js"></script>
 </body>
 </html>

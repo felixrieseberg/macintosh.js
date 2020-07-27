@@ -6,6 +6,10 @@ const { getIsDevMode } = require("./devmode");
 const windowList = {};
 let mainWindow;
 
+function getMainWindow() {
+  return mainWindow;
+}
+
 function handleNewWindow(event, url, frameName, disposition, options) {
   // open window as modal
   event.preventDefault();
@@ -85,4 +89,5 @@ function createWindow() {
 
 module.exports = {
   createWindow,
+  getMainWindow,
 };

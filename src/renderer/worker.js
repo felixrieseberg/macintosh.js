@@ -80,7 +80,7 @@ function registerWorker() {
   worker.onmessage = function (e) {
     if (e.data.type === "emulator_loading") {
       const progressElement = document.querySelector("#progressbar");
-      const progressDialog = document.querySelector("#progress p")
+      const progressDialog = document.querySelector("#progress p");
 
       if (progressElement && e.data.type === "emulator_loading") {
         const val = Math.max(10, e.data.completion * 100);
@@ -102,7 +102,7 @@ function registerWorker() {
       // If we're ready, Basilisk II will send
       // video_open()
       if (e.data.data === "video_open()") {
-        document.body.classList.remove('emulator_loading');
+        document.body.classList.remove("emulator_loading");
         document.body.classList.add("emulator_running");
       }
     } else if (e.data.type === "disk_saved") {

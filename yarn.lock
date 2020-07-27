@@ -933,6 +933,11 @@ electron-installer-redhat@^3.0.0:
     word-wrap "^1.2.3"
     yargs "^15.1.0"
 
+electron-is-dev@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/electron-is-dev/-/electron-is-dev-0.3.0.tgz#14e6fda5c68e9e4ecbeff9ccf037cbd7c05c5afe"
+  integrity sha1-FOb9pcaOnk7L7/nM8DfL18BcWv4=
+
 electron-notarize@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/electron-notarize/-/electron-notarize-1.0.0.tgz#bc925b1ccc3f79e58e029e8c4706572b01a9fd8f"
@@ -1009,7 +1014,7 @@ electron-winstaller@^4.0.0:
     lodash.template "^4.2.2"
     temp "^0.9.0"
 
-electron@10.0.0-beta.13:
+electron@10.0.0-beta.12:
   version "10.0.0-beta.12"
   resolved "https://registry.yarnpkg.com/electron/-/electron-10.0.0-beta.12.tgz#93db286f96de03104a39fc693c25d0d4c0784813"
   integrity sha512-cUYFrtGDD96aes4W+jCD1CwyC17HE4/wbok3yphL66z08ZQ+MIqgEe/pChujcSiMoK9SjvxTPPYGtszyXOrZKg==
@@ -1355,6 +1360,13 @@ getpass@^0.1.1:
   dependencies:
     assert-plus "^1.0.0"
 
+github-url-to-object@^4.0.4:
+  version "4.0.4"
+  resolved "https://registry.yarnpkg.com/github-url-to-object/-/github-url-to-object-4.0.4.tgz#a9797b7026e18d53b50b07f45b7e169b55fd90ee"
+  integrity sha512-1Ri1pR8XTfzLpbtPz5MlW/amGNdNReuExPsbF9rxLsBfO1GH9RtDBamhJikd0knMWq3RTTQDbTtw0GGvvEAJEA==
+  dependencies:
+    is-url "^1.1.0"
+
 glob@^7.1.3, glob@^7.1.4, glob@^7.1.5, glob@^7.1.6:
   version "7.1.6"
   resolved "https://registry.yarnpkg.com/glob/-/glob-7.1.6.tgz#141f33b81a7c2492e125594307480c46679278a6"
@@ -1590,6 +1602,11 @@ is-typedarray@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/is-typedarray/-/is-typedarray-1.0.0.tgz#e479c80858df0c1b11ddda6940f96011fcda4a9a"
   integrity sha1-5HnICFjfDBsR3dppQPlgEfzaSpo=
+
+is-url@^1.1.0, is-url@^1.2.4:
+  version "1.2.4"
+  resolved "https://registry.yarnpkg.com/is-url/-/is-url-1.2.4.tgz#04a4df46d28c4cff3d73d01ff06abeb318a1aa52"
+  integrity sha512-ITvGim8FhRiYe4IQ5uHSkj7pVaPDrCTkNd3yq3cV7iZAcJdHTUMPMEHcqSOy9xZ9qFenQCvi+2wjH9a1nXqHww==
 
 is-utf8@^0.2.0:
   version "0.2.1"
@@ -3035,6 +3052,16 @@ universalify@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/universalify/-/universalify-1.0.0.tgz#b61a1da173e8435b2fe3c67d29b9adf8594bd16d"
   integrity sha512-rb6X1W158d7pRQBg5gkR8uPaSfiids68LTJQYOtEUhoJUWBdaQHsuT/EUduxXYxcrt4r5PJ4fuHW1MHT6p0qug==
+
+update-electron-app@^1.5.0:
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/update-electron-app/-/update-electron-app-1.5.0.tgz#492cb904db07a0b28dbd83fb52e0fe500bbe3463"
+  integrity sha512-g7noW9JfQ8Hwq6zw9lmZei+R/ikOIBcaZ04TbmIcU5zNfv23HkN80QLLAyiR/47KvfS4sjnh2/wuDq5nh8+0mQ==
+  dependencies:
+    electron-is-dev "^0.3.0"
+    github-url-to-object "^4.0.4"
+    is-url "^1.2.4"
+    ms "^2.1.1"
 
 uri-js@^4.2.2:
   version "4.2.2"
