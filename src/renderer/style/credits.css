@@ -1,11 +1,8 @@
 @import "base.css";
 
 body {
-  background-image: url(../images/cat.png);
   font-size: 16px;
   margin: 15px;
+  text-align: left;
 }
 
-span {
-  background-color: #ffffffe3;
-}

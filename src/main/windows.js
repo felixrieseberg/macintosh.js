@@ -17,15 +17,14 @@ function handleNewWindow(event, url, frameName, disposition, options) {
   }
 
   Object.assign(options, {
-    //modal: true,
     parent: mainWindow,
-    width: 300,
-    height: 300,
+    width: 350,
+    height: 630,
     frame: true,
     transparent: false,
     resizable: true,
     webPreferences: {
-      nodeIntegration: false,
+      nodeIntegration: true,
       navigateOnDragDrop: false,
     },
   });

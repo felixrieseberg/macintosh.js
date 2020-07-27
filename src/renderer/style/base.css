@@ -16,6 +16,10 @@ body {
   text-align: center;
 }
 
+a {
+  color: #3366CC;
+}
+
 h1, h2, h3, h4, h5, h6,
 .garamond {
   font-family: Garamond, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;;

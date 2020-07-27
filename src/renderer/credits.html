@@ -7,28 +7,36 @@
   <link rel="stylesheet" href="style/credits.css">
 </head>
 <body>
-  <h1><span>Credits</span></h1>
-  <p><span>
+  <h1>Credits</h1>
+  <p>
     This app by <a href="https://www.felixrieseberg.com">Felix Rieseberg</a>. The real work was done by the people below:
-  </span>
   </p>
 
-  <p><span>Emulator: Basilisk II, a 68k Macintosh emulator, by <a href="http://basilisk.cebix.net">Christian Bauer et al</a>, modified and compiled <a href="https://jamesfriend.com.au/basilisk-ii-classic-mac-emulator-in-the-browser">with Emscripten</a> by <a>James Friend</a>.</span>
+  <p>Emulator: Basilisk II, a 68k Macintosh emulator, by <a href="http://basilisk.cebix.net">Christian Bauer et al</a>, modified and compiled <a href="https://jamesfriend.com.au/basilisk-ii-classic-mac-emulator-in-the-browser">with Emscripten</a> by <a href="https://jamesfriend.com.au">James Friend</a>.
   </p>
 
-  <p><span>Installed software from vintage computing archives: <a href="https://winworldpc.com">WinWorldPC</a>, <a href="https://macintoshgarden.org">Macintosh Garden</a>, and <a href="https://www.macintoshrepository.org/">Macintosh Repository</a>.</span>
+  <p>Installed software from vintage computing archives: <a href="https://winworldpc.com">WinWorldPC</a>, <a href="https://macintoshgarden.org">Macintosh Garden</a>, and <a href="https://www.macintoshrepository.org/">Macintosh Repository</a>.
   </p>
 
-  <p><span>This software is not affiliated with nor authorized by Apple. It is
-    provided for educational purposes only and does not allow saving of
-    any state or files.
-  </span>
+  <p>This software is not affiliated with nor authorized by Apple. It is
+    provided for educational purposes only. This is an unstable toy and
+    should not be expected to work properly.
   </p>
   <h1>Licenses</h1>
-  <p><span>
-    The <a href="https://github.com/felixrieseberg/macintosh">source code for this app can be found on GitHub</a>, where it is available under the MIT License.
-  </span></p>
+  <p>
+    The <a href="https://github.com/felixrieseberg/macintosh">source code for this app can be found on GitHub</a>.
+  </p>
 
-  <p><span>Basilisk II and its components are released under the GNU GPL. See LICENSE for details.</span></p>
+  <p>Basilisk II and its components are released under the GNU GPL. See <a href="#" id="license">LICENSE</a> for details.</p>
+
+  <script>
+    license.onclick = () => {
+      const { shell } = require('electron');
+      const path = require('path');
+
+      const licensePath = path.join(__dirname, '../basilisk/LICENSE.txt');
+      shell.openPath(licensePath);
+    }
+  </script>
 </body>
 </html>
