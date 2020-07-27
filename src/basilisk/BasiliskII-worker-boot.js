@@ -1,31 +1,93 @@
 const fs = require("fs");
 const path = require("path");
 
-const memAllocSet = new Set();
-const memAllocSetPersistent = new Set();
+const homeDir = require("os").homedir();
+const macDir = path.join(homeDir, "macintosh.js");
+const macintoshCopyPath = path.join(__dirname, "user_files");
 
-var pathGetFilenameRegex = /\/([^\/]+)$/;
+function cleanupCopyPath() {
+  try {
+    if (fs.existsSync(macintoshCopyPath)) {
+      fs.rmdirSync(macintoshCopyPath, { recursive: true });
+    }
 
-function pathGetFilename(path) {
-  var matches = path.match(pathGetFilenameRegex);
-  if (matches && matches.length) {
-    return matches[1];
-  } else {
-    return path;
+    fs.mkdirSync(macintoshCopyPath);
+  } catch (error) {
+    console.error(`cleanupCopyPath: Failed to remove`, error);
   }
 }
 
 function addAutoloader(module) {
-  var loadDatafiles = function () {
-    module.autoloadFiles.forEach(function (filepath) {
+  const copyFilesAtPath = function (sourcePath) {
+    try {
+      const absoluteSourcePath = path.join(macDir, sourcePath);
+      const absoluteTargetPath = path.join(macintoshCopyPath, sourcePath);
+      const targetPath = `/macintosh.js${sourcePath ? `/${sourcePath}` : '' }`;
+      const files = fs.readdirSync(absoluteSourcePath);
+
+      (files || []).forEach((fileName) => {
+        try {
+          // If not, let's move on
+          const fileSourcePath = path.join(absoluteSourcePath, fileName);
+          const copyPath = path.join(absoluteTargetPath, fileName);
+          const relativeSourcePath = `${sourcePath ? `${sourcePath}/` : ''}${fileName}`;
+          const fileUrl = `user_files/${relativeSourcePath}`
+
+          // Check if directory
+          if (fs.statSync(fileSourcePath).isDirectory()) {
+            if (!fs.existsSync(copyPath)) {
+              fs.mkdirSync(copyPath);
+            }
+
+            try {
+              const virtualDirPath = `${targetPath}/${fileName}`;
+              module.FS.mkdir(virtualDirPath);
+            } catch (error) {
+              console.log(error);
+            }
+
+            copyFilesAtPath(relativeSourcePath);
+            return;
+          }
+
+          // We copy the files over and then add them as preload
+          console.log(`loadDatafiles: Adding ${fileName}`);
+          fs.copyFileSync(fileSourcePath, copyPath);
+
+          module.FS_createPreloadedFile(
+            targetPath,
+            fileName,
+            fileUrl,
+            true,
+            true
+          );
+        } catch (error) {
+          console.error(`loadDatafiles: Failed to preload ${fileName}`, error);
+        }
+      });
+    } catch (error) {
+      console.error(`loadDatafiles: Failed to copyFilesAtPath`, error);
+    }
+  }
+
+  const loadDatafiles = function () {
+    module.autoloadFiles.forEach((filepath) => {
       module.FS_createPreloadedFile(
         "/",
-        pathGetFilename(filepath),
+        path.basename(filepath),
         filepath,
         true,
         true
       );
     });
+
+    // If the user has a macintosh.js dir, we'll copy over user
+    // data
+    if (!fs.existsSync(macDir)) {
+      return;
+    }
+
+    copyFilesAtPath('');
   };
 
   if (module.autoloadFiles) {
@@ -49,7 +111,59 @@ function addCustomAsyncInit(module) {
   }
 }
 
-var InputBufferAddresses = {
+function writeSafely(filePath, fileData) {
+  return new Promise((resolve) => {
+    fs.writeFile(filePath, fileData, (error) => {
+      if (error) {
+        console.error(`Disk save: Encountered error for ${filePath}`, error);
+      } else {
+        console.log(`Disk save: Finished writing ${filePath}`);
+      }
+
+      resolve();
+    });
+  });
+}
+
+async function saveFilesInPath(folderPath) {
+  const entries = (Module.FS.readdir(folderPath) || []).filter(
+    (v) => !v.startsWith(".")
+  );
+
+  if (!entries || entries.length === 0) return;
+
+  // Ensure directory
+  const targetDir = path.join(homeDir, folderPath);
+  if (!fs.existsSync(targetDir)) {
+    fs.mkdirSync(targetDir);
+  }
+
+  for (const file of entries) {
+    try {
+      const fileSourcePath = `${folderPath}/${file}`;
+      const stat = Module.FS.analyzePath(fileSourcePath);
+
+      if (stat && stat.object && stat.object.isFolder) {
+        // This is a folder, step into
+        await saveFilesInPath(fileSourcePath);
+      } else if (stat && stat.object && stat.object.contents) {
+        const fileData = stat.object.contents;
+        const filePath = path.join(targetDir, file);
+
+        await writeSafely(filePath, fileData);
+      } else {
+        console.log(
+          `Disk save: Object at ${fileSourcePath} is something, but we don't know what`,
+          stat
+        );
+      }
+    } catch (error) {
+      console.error(`Disk save: Could not write ${file}`, error);
+    }
+  }
+}
+
+let InputBufferAddresses = {
   globalLockAddr: 0,
   mouseMoveFlagAddr: 1,
   mouseMoveXDeltaAddr: 2,
@@ -60,7 +174,7 @@ var InputBufferAddresses = {
   keyStateAddr: 7,
 };
 
-var LockStates = {
+let LockStates = {
   READY_FOR_UI_THREAD: 0,
   UI_THREAD_LOCK: 1,
   READY_FOR_EMUL_THREAD: 2,
@@ -69,7 +183,7 @@ var LockStates = {
 
 var Module = null;
 
-self.onmessage = function (msg) {
+self.onmessage = async function (msg) {
   console.log("Worker message received", msg.data);
 
   // If it's a config object, start the show
@@ -84,39 +198,47 @@ self.onmessage = function (msg) {
     const diskData = Module.FS.readFile("/disk");
     const diskPath = path.join(__dirname, "disk");
 
-    fs.writeFile(diskPath, diskData, (error) => {
+    // I wish we could do this with promises, but OOM crashes kill that idea
+    try {
+      console.log(`Trying to save disk`);
+      fs.writeFileSync(diskPath, diskData);
       console.log(`Finished writing disk`);
+    } catch (error) {
+      console.error(`Failed to write disk`, error);
+    }
 
-      postMessage({ type: "disk_saved" });
+    // Now, user files
+    console.log(`Saving user files`);
+    await saveFilesInPath("/macintosh.js");
 
-      if (error) {
-        console.error(error);
-      }
-    });
+    // Clean up old copy dir
+    cleanupCopyPath();
+
+    postMessage({ type: "disk_saved" });
   }
 };
 
 function startEmulator(parentConfig) {
-  var screenBufferView = new Uint8Array(
+  let screenBufferView = new Uint8Array(
     parentConfig.screenBuffer,
     0,
     parentConfig.screenBufferSize
   );
 
-  var videoModeBufferView = new Int32Array(
+  let videoModeBufferView = new Int32Array(
     parentConfig.videoModeBuffer,
     0,
     parentConfig.videoModeBufferSize
   );
 
-  var inputBufferView = new Int32Array(
+  let inputBufferView = new Int32Array(
     parentConfig.inputBuffer,
     0,
     parentConfig.inputBufferSize
   );
 
-  var nextAudioChunkIndex = 0;
-  var audioDataBufferView = new Uint8Array(
+  let nextAudioChunkIndex = 0;
+  let audioDataBufferView = new Uint8Array(
     parentConfig.audioDataBuffer,
     0,
     parentConfig.audioDataBufferSize
@@ -145,7 +267,7 @@ function startEmulator(parentConfig) {
   }
 
   function tryToAcquireCyclicalLock(bufferView, lockIndex) {
-    var res = Atomics.compareExchange(
+    let res = Atomics.compareExchange(
       bufferView,
       lockIndex,
       LockStates.READY_FOR_EMUL_THREAD,
@@ -181,9 +303,9 @@ function startEmulator(parentConfig) {
     releaseCyclicalLock(inputBufferView, InputBufferAddresses.globalLockAddr);
   }
 
-  var AudioConfig = null;
+  let AudioConfig = null;
 
-  var AudioBufferQueue = [];
+  let AudioBufferQueue = [];
 
   Module = {
     autoloadFiles: ["disk", "rom", "prefs"],
@@ -200,8 +322,8 @@ function startEmulator(parentConfig) {
       videoModeBufferView[1] = height;
       videoModeBufferView[2] = depth;
       videoModeBufferView[3] = usingPalette;
-      var length = width * height * (depth === 32 ? 4 : 1); // 32bpp or 8bpp
-      for (var i = 0; i < length; i++) {
+      let length = width * height * (depth === 32 ? 4 : 1); // 32bpp or 8bpp
+      for (let i = 0; i < length; i++) {
         screenBufferView[i] = Module.HEAPU8[bufPtr + i];
       }
       // releaseTwoStateLock(videoModeBufferView, 9);
@@ -223,14 +345,14 @@ function startEmulator(parentConfig) {
     },
 
     enqueueAudio: function enqueueAudio(bufPtr, nbytes, type) {
-      var newAudio = Module.HEAPU8.slice(bufPtr, bufPtr + nbytes);
+      let newAudio = Module.HEAPU8.slice(bufPtr, bufPtr + nbytes);
       // console.assert(
       //   nbytes == parentConfig.audioBlockBufferSize,
       //   `emulator wrote ${nbytes}, expected ${parentConfig.audioBlockBufferSize}`
       // );
 
-      var writingChunkIndex = nextAudioChunkIndex;
-      var writingChunkAddr =
+      let writingChunkIndex = nextAudioChunkIndex;
+      let writingChunkAddr =
         writingChunkIndex * parentConfig.audioBlockChunkSize;
 
       if (audioDataBufferView[writingChunkAddr] === LockStates.UI_THREAD_LOCK) {
@@ -241,7 +363,7 @@ function startEmulator(parentConfig) {
         return 0;
       }
 
-      var nextNextChunkIndex = writingChunkIndex + 1;
+      let nextNextChunkIndex = writingChunkIndex + 1;
       if (
         nextNextChunkIndex * parentConfig.audioBlockChunkSize >
         audioDataBufferView.length - 1
@@ -297,7 +419,6 @@ function startEmulator(parentConfig) {
     releaseInputLock: releaseInputLock,
   };
 
-  // inject extra behaviours
   addAutoloader(Module);
   addCustomAsyncInit(Module);
 

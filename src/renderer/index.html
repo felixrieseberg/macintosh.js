@@ -5,12 +5,16 @@
     <title>macintosh.js</title>
     <link rel="stylesheet" href="style/index.css">
   </head>
-  <body class="emulator_running">
+  <body class="emulator_loading">
     <canvas id="canvas" width="800" height="600" oncontextmenu="event.preventDefault()"></canvas>
     <div id="disk_saving" class="dialog absolute_center hidden">
-      <p>Saving virtual machine disk.</p>
+      <p>Saving virtual machine disk and files.</p>
       <p>We'll quit once done.</p>
       <div class="lds-spinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+    </div>
+    <div id="progress" class="dialog absolute_center">
+      <p>Loading emulator dependencies...</p>
+      <progress id="progressbar" value="0" max="100"></progress>
     </div>
     <div class="controls garamond">
       <div class="clear">

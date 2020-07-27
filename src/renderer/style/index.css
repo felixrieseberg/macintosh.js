@@ -49,10 +49,29 @@
   text-decoration: underline;
 }
 
-.emulator_running #turned_off {
+#progress {
   display: none;
+}
+
+.emulator_loading #progress {
+  display: block;
 }
 
 #warning {
   width: var(--warning-width);
+}
+
+progress {
+  margin-bottom: 20px;
+  appearance: none;
+  width: 100%;
+}
+
+progress[value]::-webkit-progress-bar {
+  background-color: #CCCCFF;
+  border: 1px solid #000;
+}
+
+progress[value]::-webkit-progress-value {
+  background-color: #444444;
 }

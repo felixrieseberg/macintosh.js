@@ -14,6 +14,7 @@ const {
   AUDIO_DATA_BUFFER_SIZE,
 } = require("./audio");
 const { quit } = require("./ipc");
+const { isDevMode } = require("../main/devmode");
 
 let isWorkerRunning = false;
 let isWorkerSaving = false;
@@ -34,10 +35,14 @@ function saveDisk() {
 }
 
 function handleDiskSaved() {
+  console.log(`All files saved`);
+
   isWorkerSaving = false;
 
   // We're just gonna quit
-  quit();
+  if (!isDevMode) {
+    quit();
+  }
 }
 
 async function handleWorkerShutdown() {
@@ -52,7 +57,7 @@ async function handleWorkerShutdown() {
 }
 
 function registerWorker() {
-  var workerConfig = {
+  const workerConfig = {
     inputBuffer: inputBuffer,
     inputBufferSize: INPUT_BUFFER_SIZE,
     screenBuffer: screenBuffer,
@@ -76,44 +81,41 @@ function registerWorker() {
 
   worker.postMessage(workerConfig);
   worker.onmessage = function (e) {
-    if (
-      e.data.type === "emulator_ready" ||
-      e.data.type === "emulator_loading"
-    ) {
-      // document.body.className =
-      //   e.data.type === 'emulator_ready' ? '' : 'loading';
-      // const progressElement = document.getElementById('progress');
-      // if (progressElement && e.data.type === 'emulator_loading') {
-      //   progressElement.value = Math.max(10, e.data.completion * 100);
-      //   progressElement.max = 100;
-      //   progressElement.hidden = false;
-      // } else {
-      //   progressElement.value = null;
-      //   progressElement.max = null;
-      //   progressElement.hidden = true;
-      // }
-    }
+    if (e.data.type === "emulator_loading") {
+      const progressElement = document.querySelector("#progressbar");
+      const progressDialog = document.querySelector("#progress p")
 
-    if (e.data.type === "TTY") {
+      if (progressElement && e.data.type === "emulator_loading") {
+        const val = Math.max(10, e.data.completion * 100);
+        console.log(`Loading progress: ${val}`);
+
+        progressElement.value = val;
+        progressElement.max = 100;
+      } else {
+        progressDialog.innerText = `Files loaded, now booting`;
+      }
+    } else if (e.data.type === "TTY") {
       // If we're shutting down, Basilisk II will send
       // close_audio to TTY - our signal that we can
       // save the disk image
       if (e.data.data === "close_audio") {
         handleWorkerShutdown();
       }
-    }
 
-    if (e.data.type === "disk_saved") {
+      // If we're ready, Basilisk II will send
+      // video_open()
+      if (e.data.data === "video_open()") {
+        document.body.classList.remove('emulator_loading');
+        document.body.classList.add("emulator_running");
+      }
+    } else if (e.data.type === "disk_saved") {
       handleDiskSaved();
     }
   };
 }
 
-window.setCanvasBlank = setCanvasBlank;
-
 module.exports = {
   registerWorker,
   getIsWorkerRunning,
   getIsWorkerSaving,
-  setCanvasBlank,
 };

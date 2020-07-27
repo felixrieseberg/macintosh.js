@@ -17,4 +17,4 @@ async function start() {
   asyncLoop();
 }
 
-//start();
+start();
