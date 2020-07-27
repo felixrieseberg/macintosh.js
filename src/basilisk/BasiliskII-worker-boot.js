@@ -94,13 +94,7 @@ function addAutoloader(module) {
 
       console.log(`Adding preload file`, { parent, name, url: filepath });
 
-      module.FS_createPreloadedFile(
-        parent,
-        name,
-        filepath,
-        true,
-        true
-      );
+      module.FS_createPreloadedFile(parent, name, filepath, true, true);
     });
 
     // If the user has a macintosh.js dir, we'll copy over user
@@ -180,7 +174,7 @@ function getPrefs(userImages = []) {
   return "prefs";
 }
 
-function isMacDirFileOfType(extension = '', v = '') {
+function isMacDirFileOfType(extension = "", v = "") {
   const isType = v.endsWith(`.${extension}`);
   const isMatch = isType && fs.statSync(path.join(macDir, v)).isFile();
 
@@ -199,15 +193,18 @@ function copyUserImages() {
     }
 
     const macDirFiles = fs.readdirSync(macDir);
-    const imgFiles = macDirFiles.filter((v) => isMacDirFileOfType('img', v));
-    const isoFiles = macDirFiles.filter((v) => isMacDirFileOfType('iso', v));
+    const imgFiles = macDirFiles.filter((v) => isMacDirFileOfType("img", v));
+    const isoFiles = macDirFiles.filter((v) => isMacDirFileOfType("iso", v));
     const isoImgFiles = [...isoFiles, ...imgFiles];
 
     console.log(`copyUserImages: iso and img files`, isoImgFiles);
 
     isoImgFiles.forEach((fileName, i) => {
       const sourcePath = path.join(macDir, fileName);
-      const sanitizedFileName = `user_image_${i}_${fileName.replace(/[^\w\s\.]/gi, '')}`;
+      const sanitizedFileName = `user_image_${i}_${fileName.replace(
+        /[^\w\s\.]/gi,
+        ""
+      )}`;
       const targetPath = path.join(__dirname, sanitizedFileName);
 
       if (fs.existsSync(targetPath)) {
@@ -233,7 +230,7 @@ function copyUserImages() {
     // Delete all old files
     const imagesCopyFiles = fs.readdirSync(__dirname);
     imagesCopyFiles.forEach((v) => {
-      if (v.startsWith('user_image_') && !result.includes(v)) {
+      if (v.startsWith("user_image_") && !result.includes(v)) {
         fs.unlinkSync(path.join(__dirname, v));
       }
     });
