@@ -48,76 +48,79 @@ function getUserDataDiskImage() {
   }
 }
 
-function addAutoloader(module) {
-  const copyFilesAtPath = function (sourcePath) {
-    try {
-      const absoluteSourcePath = path.join(macDir, sourcePath);
-      const absoluteTargetPath = path.join(macintoshCopyPath, sourcePath);
-      const targetPath = `/macintosh.js${sourcePath ? `/${sourcePath}` : ""}`;
-      const files = fs.readdirSync(absoluteSourcePath).filter((v) => {
-        // Remove iso and img files
-        return !v.endsWith(".iso") && !v.endsWith(".img");
-      });
+// Taken a given path, it'll look at all the files in there,
+// copy them over to the basilisk folder, and then add them
+// to MEMFS
+function copyFilesAtPath(module, sourcePath) {
+  try {
+    const absoluteSourcePath = path.join(macDir, sourcePath);
+    const absoluteTargetPath = path.join(macintoshCopyPath, sourcePath);
+    const targetPath = `/macintosh.js${sourcePath ? `/${sourcePath}` : ""}`;
+    const files = fs.readdirSync(absoluteSourcePath).filter((v) => {
+      // Remove hidden, iso, and img files
+      return !v.startsWith('.') && !v.endsWith(".iso") && !v.endsWith(".img");
+    });
 
-      (files || []).forEach((fileName) => {
-        try {
-          // If not, let's move on
-          const fileSourcePath = path.join(absoluteSourcePath, fileName);
-          const copyPath = path.join(absoluteTargetPath, fileName);
-          const relativeSourcePath = `${
-            sourcePath ? `${sourcePath}/` : ""
-          }${fileName}`;
-          const fileUrl = `user_files/${relativeSourcePath}`;
+    (files || []).forEach((fileName) => {
+      try {
+        // If not, let's move on
+        const fileSourcePath = path.join(absoluteSourcePath, fileName);
+        const copyPath = path.join(absoluteTargetPath, fileName);
+        const relativeSourcePath = `${
+          sourcePath ? `${sourcePath}/` : ""
+        }${fileName}`;
+        const fileUrl = `user_files/${relativeSourcePath}`;
 
-          // Check if directory
-          if (fs.statSync(fileSourcePath).isDirectory()) {
-            if (!fs.existsSync(copyPath)) {
-              fs.mkdirSync(copyPath);
-            }
-
-            try {
-              const virtualDirPath = `${targetPath}/${fileName}`;
-              module.FS.mkdir(virtualDirPath);
-            } catch (error) {
-              console.log(error);
-            }
-
-            copyFilesAtPath(relativeSourcePath);
-            return;
+        // Check if directory
+        if (fs.statSync(fileSourcePath).isDirectory()) {
+          if (!fs.existsSync(copyPath)) {
+            fs.mkdirSync(copyPath);
           }
 
-          // We copy the files over and then add them as preload
-          console.log(`loadDatafiles: Adding ${fileName}`);
-          fs.copyFileSync(fileSourcePath, copyPath);
+          try {
+            const virtualDirPath = `${targetPath}/${fileName}`;
+            module.FS.mkdir(virtualDirPath);
+          } catch (error) {
+            console.log(error);
+          }
 
-          module.FS_createPreloadedFile(
-            targetPath,
-            fileName,
-            fileUrl,
-            true,
-            true
-          );
-        } catch (error) {
-          postMessage("showMessageBoxSync", {
-            type: "error",
-            title: "Could not transfer file",
-            message: `We tried to transfer ${fileName} to the virtual machine, but failed. The error was: ${error}`,
-          });
-
-          console.error(`loadDatafiles: Failed to preload ${fileName}`, error);
+          copyFilesAtPath(module, relativeSourcePath);
+          return;
         }
-      });
-    } catch (error) {
-      postMessage("showMessageBoxSync", {
-        type: "error",
-        title: "Could not transfer files",
-        message: `We tried to transfer files to the virtual machine, but failed. The error was: ${error}`,
-      });
 
-      console.error(`loadDatafiles: Failed to copyFilesAtPath`, error);
-    }
-  };
+        // We copy the files over and then add them as preload
+        console.log(`copyFilesAtPath: Adding ${fileName}`);
+        fs.copyFileSync(fileSourcePath, copyPath);
 
+        module.FS_createPreloadedFile(
+          targetPath,
+          fileName,
+          fileUrl,
+          true,
+          true
+        );
+      } catch (error) {
+        postMessage("showMessageBoxSync", {
+          type: "error",
+          title: "Could not transfer file",
+          message: `We tried to transfer ${fileName} to the virtual machine, but failed. The error was: ${error}`,
+        });
+
+        console.error(`copyFilesAtPath: Failed to preload ${fileName}`, error);
+      }
+    });
+  } catch (error) {
+    postMessage("showMessageBoxSync", {
+      type: "error",
+      title: "Could not transfer files",
+      message: `We tried to transfer files to the virtual machine, but failed. The error was: ${error}`,
+    });
+
+    console.error(`copyFilesAtPath: Failed to copyFilesAtPath`, error);
+  }
+};
+
+function addAutoloader(module) {
   const loadDatafiles = function () {
     module.autoloadFiles.forEach((filepath) => {
       const parent = `/`;
@@ -134,7 +137,8 @@ function addAutoloader(module) {
       return;
     }
 
-    copyFilesAtPath("");
+    // Load user files
+    copyFilesAtPath(module, "");
   };
 
   if (module.autoloadFiles) {
