@@ -2,13 +2,14 @@
 
 This is Mac OS 8, running in an [Electron](https://electronjs.org/) app. Yes, it's the full thing. I'm sorry.
 
+![Screenshot](https://user-images.githubusercontent.com/1426799/88608634-0f7f4880-d037-11ea-8d3d-c2a5ef3a99d5.png)
+
 ## Downloads
+
 |  | Windows | macOS | Linux |
 |---------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Standalone Download | 📦[Standalone, 32-bit](https://github.com/felixrieseberg/macintosh.js/releases/download/v2.2.1/macintosh.js-2.2.1-win32-standalone-ia32.zip) <br /> 📦[Standalone, 64-bit](https://github.com/felixrieseberg/macintosh.js/releases/download/v2.2.1/macintosh.js-2.2.1-win32-standalone-x64.zip)  | 📦[Standalone](https://github.com/felixrieseberg/macintosh.js/releases/download/v2.2.1/macintosh.js-macos-2.2.1.zip) |  |
-| Installer | 💽[Setup, 64-bit](https://github.com/felixrieseberg/macintosh.js/releases/download/v2.2.1/macintosh.js-2.2.1-setup-win32-x64.exe) <br /> 💽[Setup, 32-bit](https://github.com/felixrieseberg/macintosh.js/releases/download/v2.2.1/macintosh.js-2.2.1-setup-win32-ia32.exe)  |  |  💽[deb, 64-bit](https://github.com/felixrieseberg/macintosh.js/releases/download/v2.2.1/macintosh.js-linux-2.2.1_amd64.deb) <br /> 💽[rpm, 64-bit](https://github.com/felixrieseberg/macintosh.js/releases/download/v2.2.1/macintosh.js-linux-2.2.1.x86_64.rpm) |
-
-![Screenshot](https://user-images.githubusercontent.com/1426799/88608634-0f7f4880-d037-11ea-8d3d-c2a5ef3a99d5.png)
+| Standalone Download | 📦[Standalone, 32-bit](https://github.com/felixrieseberg/macintosh.js/releases/download/v1.0.0/macintosh.js-1.0.0-win32-standalone-ia32.zip) <br /> 📦[Standalone, 64-bit](https://github.com/felixrieseberg/macintosh.js/releases/download/v1.0.0/macintosh.js-1.0.0-win32-standalone-x64.zip)  | 📦[Standalone](https://github.com/felixrieseberg/macintosh.js/releases/download/v1.0.0/macintosh.js-macos-1.0.0.zip) |  |
+| Installer | 💽[Setup, 64-bit](https://github.com/felixrieseberg/macintosh.js/releases/download/v1.0.0/macintosh.js-1.0.0-setup-win32-x64.exe) <br /> 💽[Setup, 32-bit](https://github.com/felixrieseberg/macintosh.js/releases/download/v1.0.0/macintosh.js-1.0.0-setup-win32-ia32.exe)  |  |  💽[deb, 64-bit](https://github.com/felixrieseberg/macintosh.js/releases/download/v1.0.0/macintosh.js-linux-1.0.0_amd64.deb) <br /> 💽[rpm, 64-bit](https://github.com/felixrieseberg/macintosh.js/releases/download/v1.0.0/macintosh.js-linux-1.0.0.x86_64.rpm) |
 
 ## Does it work?
 Yes! Quite well, actually - on macOS, Windows, and Linux. Bear in mind that this is written entirely in JavaScript, so please adjust your expectations. The virtual machine is emulating a 1991 Macintosh Quadra 900 with a Motorola CPU, which Apple used before switching to IBM's PowerPC architecture in the late 1990s.
