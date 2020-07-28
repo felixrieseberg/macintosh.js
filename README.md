@@ -8,7 +8,7 @@ This is Mac OS 8, running in an [Electron](https://electronjs.org/) app. Yes, it
 | Standalone Download | 📦[Standalone, 32-bit](https://github.com/felixrieseberg/macintosh.js/releases/download/v2.2.1/macintosh.js-2.2.1-win32-standalone-ia32.zip) <br /> 📦[Standalone, 64-bit](https://github.com/felixrieseberg/macintosh.js/releases/download/v2.2.1/macintosh.js-2.2.1-win32-standalone-x64.zip)  | 📦[Standalone](https://github.com/felixrieseberg/macintosh.js/releases/download/v2.2.1/macintosh.js-macos-2.2.1.zip) |  |
 | Installer | 💽[Setup, 64-bit](https://github.com/felixrieseberg/macintosh.js/releases/download/v2.2.1/macintosh.js-2.2.1-setup-win32-x64.exe) <br /> 💽[Setup, 32-bit](https://github.com/felixrieseberg/macintosh.js/releases/download/v2.2.1/macintosh.js-2.2.1-setup-win32-ia32.exe)  |  |  💽[deb, 64-bit](https://github.com/felixrieseberg/macintosh.js/releases/download/v2.2.1/macintosh.js-linux-2.2.1_amd64.deb) <br /> 💽[rpm, 64-bit](https://github.com/felixrieseberg/macintosh.js/releases/download/v2.2.1/macintosh.js-linux-2.2.1.x86_64.rpm) |
 
-![Screenshot]()
+![Screenshot](https://user-images.githubusercontent.com/1426799/88608634-0f7f4880-d037-11ea-8d3d-c2a5ef3a99d5.png)
 
 ## Does it work?
 Yes! Quite well, actually - on macOS, Windows, and Linux. Bear in mind that this is written entirely in JavaScript, so please adjust your expectations. The virtual machine is emulating a 1991 Macintosh Quadra 900 with a Motorola CPU, which Apple used before switching to IBM's PowerPC architecture in the late 1990s.
