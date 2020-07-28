@@ -47,7 +47,8 @@ module.exports = {
           setupExe: `macintoshjs-${package.version}-setup-${arch}.exe`,
           setupIcon: path.resolve(__dirname, 'assets', 'icon.ico'),
           certificateFile: process.env.WINDOWS_CERTIFICATE_FILE,
-          certificatePassword: process.env.WINDOWS_CERTIFICATE_PASSWORD
+          certificatePassword: process.env.WINDOWS_CERTIFICATE_PASSWORD,
+          loadingGif: './assets/loadingGif.gif',
         }
       }
     },
