@@ -36,14 +36,18 @@ module.exports = {
       ascProvider: 'LT94ZKYDCJ'
     },
     ignore: [
+      /\/github(\/?)/,
       /\/assets(\/?)/,
       /\/docs(\/?)/,
       /\/tools(\/?)/,
+      /\/src\/basilisk\/user_files(\/?)/,
       /package-lock\.json/,
       /README\.md/,
       /CREDITS\.md/,
       /issue_template\.md/,
       /HELP\.md/,
+      /win-certificate\.pfx/,
+      /user_image_.*/
     ]
   },
   makers: [

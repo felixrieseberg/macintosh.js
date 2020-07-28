@@ -13,7 +13,7 @@ const {
   audioBlockChunkSize,
   AUDIO_DATA_BUFFER_SIZE,
 } = require("./audio");
-const { quit } = require("./ipc");
+const { quit, getIsDevMode } = require("./ipc");
 
 let isWorkerRunning = false;
 let isWorkerSaving = false;
@@ -33,13 +33,17 @@ function saveDisk() {
   worker.postMessage("disk_save");
 }
 
-function handleDiskSaved() {
+async function handleDiskSaved() {
   console.log(`All files saved`);
 
   isWorkerSaving = false;
 
   // We're just gonna quit
-  quit();
+  if (!(await getIsDevMode())) {
+    quit();
+  } else {
+    alert(`We would usually quit, but developer mode is active`);
+  }
 }
 
 async function handleWorkerShutdown() {
