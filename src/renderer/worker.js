@@ -72,7 +72,7 @@ async function registerWorker() {
     SCREEN_WIDTH: SCREEN_WIDTH,
     SCREEN_HEIGHT: SCREEN_HEIGHT,
     userDataPath: await getUserDataPath(),
-    isDevMode: await getIsDevMode()
+    isDevMode: await getIsDevMode(),
   };
 
   worker = window.emulatorWorker = new Worker(

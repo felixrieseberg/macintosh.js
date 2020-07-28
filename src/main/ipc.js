@@ -32,7 +32,7 @@ function registerIpcHandlers() {
   });
 
   ipcMain.handle("getUserDataPath", () => {
-    return app.getPath('userData');
+    return app.getPath("userData");
   });
 }
 

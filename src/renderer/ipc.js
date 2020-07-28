@@ -23,5 +23,5 @@ module.exports = {
 
   getUserDataPath() {
     return ipcRenderer.invoke("getUserDataPath");
-  }
+  },
 };
