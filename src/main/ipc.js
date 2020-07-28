@@ -30,6 +30,10 @@ function registerIpcHandlers() {
   ipcMain.handle("getAppVersion", () => {
     return app.getVersion();
   });
+
+  ipcMain.handle("getUserDataPath", () => {
+    return app.getPath('userData');
+  });
 }
 
 module.exports = {

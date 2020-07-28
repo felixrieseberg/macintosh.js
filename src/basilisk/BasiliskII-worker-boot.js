@@ -1,9 +1,17 @@
 const fs = require("fs");
 const path = require("path");
+const { error } = require("console");
 
 const homeDir = require("os").homedir();
 const macDir = path.join(homeDir, "macintosh.js");
 const macintoshCopyPath = path.join(__dirname, "user_files");
+
+// Set by config
+let userDataPath;
+
+function getUserDataDiskPath() {
+  return path.join(userDataPath, 'disk');
+}
 
 function cleanupCopyPath() {
   try {
@@ -14,6 +22,29 @@ function cleanupCopyPath() {
     fs.mkdirSync(macintoshCopyPath);
   } catch (error) {
     console.error(`cleanupCopyPath: Failed to remove`, error);
+  }
+}
+
+function getUserDataDiskImage() {
+  if (!userDataPath) {
+    console.error(`getUserDataDiskImage: userDataPath not set`);
+    return;
+  }
+
+  const diskImageUserPath = getUserDataDiskPath();
+  const diskImagePath = path.join(__dirname, 'disk');
+
+  // If there's a disk image, move it over
+  if (fs.existsSync(diskImageUserPath)) {
+    // Delete a possible basilisk disk image
+    if (fs.existsSync(diskImagePath)) {
+      console.log(`Disk image ${diskImageUserPath} exists, deleting ${diskImagePath}`);
+      fs.unlinkSync(diskImagePath);
+    }
+
+    fs.renameSync(diskImageUserPath, diskImagePath);
+  } else {
+    console.log(`getUserDataDiskImage: No image in user data dir, not doing anything`);
   }
 }
 
@@ -326,7 +357,8 @@ self.onmessage = async function (msg) {
 
   if (msg && msg.data === "disk_save") {
     const diskData = Module.FS.readFile("/disk");
-    const diskPath = path.join(__dirname, "disk");
+    const diskPath = getUserDataDiskPath();
+    const basiliskDiskPath = path.join(__dirname, 'disk');
 
     // I wish we could do this with promises, but OOM crashes kill that idea
     try {
@@ -335,6 +367,14 @@ self.onmessage = async function (msg) {
       console.log(`Finished writing disk`);
     } catch (error) {
       console.error(`Failed to write disk`, error);
+    }
+
+    try {
+      if (fs.existsSync(basiliskDiskPath) && !(Module && Module.isDevMode)) {
+        fs.unlinkSync(basiliskDiskPath);
+      }
+    } catch (error) {
+      console.error(`Failed to delete ${basiliskDiskPath}`);
     }
 
     // Now, user files
@@ -349,6 +389,10 @@ self.onmessage = async function (msg) {
 };
 
 function startEmulator(parentConfig) {
+  userDataPath = parentConfig.userDataPath;
+
+  getUserDataDiskImage();
+
   let screenBufferView = new Uint8Array(
     parentConfig.screenBuffer,
     0,

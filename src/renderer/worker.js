@@ -13,7 +13,7 @@ const {
   audioBlockChunkSize,
   AUDIO_DATA_BUFFER_SIZE,
 } = require("./audio");
-const { quit, getIsDevMode } = require("./ipc");
+const { quit, getIsDevMode, getUserDataPath } = require("./ipc");
 
 let isWorkerRunning = false;
 let isWorkerSaving = false;
@@ -57,7 +57,7 @@ async function handleWorkerShutdown() {
   saveDisk();
 }
 
-function registerWorker() {
+async function registerWorker() {
   const workerConfig = {
     inputBuffer: inputBuffer,
     inputBufferSize: INPUT_BUFFER_SIZE,
@@ -71,6 +71,8 @@ function registerWorker() {
     audioBlockChunkSize: audioBlockChunkSize,
     SCREEN_WIDTH: SCREEN_WIDTH,
     SCREEN_HEIGHT: SCREEN_HEIGHT,
+    userDataPath: await getUserDataPath(),
+    isDevMode: await getIsDevMode()
   };
 
   worker = window.emulatorWorker = new Worker(

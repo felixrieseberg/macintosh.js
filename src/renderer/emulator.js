@@ -11,7 +11,7 @@ function asyncLoop() {
 }
 
 async function start() {
-  registerWorker();
+  await registerWorker();
   setupDialogs();
   openAudio();
   asyncLoop();

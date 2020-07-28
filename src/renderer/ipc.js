@@ -20,4 +20,8 @@ module.exports = {
   getAppVersion() {
     return ipcRenderer.invoke("getAppVersion");
   },
+
+  getUserDataPath() {
+    return ipcRenderer.invoke("getUserDataPath");
+  }
 };
