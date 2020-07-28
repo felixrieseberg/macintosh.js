@@ -1,8 +1,7 @@
 const { shell, ipcRenderer } = require("electron");
 const path = require("path");
-const { versions } = require("process");
 
-const { getAppVersion } = require("./ipc.js");
+const { getAppVersion } = require("./ipc");
 
 async function credits() {
   license.onclick = () => {
