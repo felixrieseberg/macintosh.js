@@ -59,8 +59,8 @@ jobs:
         if: matrix.os == 'macOS-latest'
         run: chmod +x tools/add-macos-cert.sh && ./tools/add-macos-cert.sh
         env:
-          CERTIFICATE_OSX_APPLICATION: ${{ secrets.MACOS_CERT_P12 }}
-          CERTIFICATE_PASSWORD: ${{ secrets.MACOS_CERT_PASSWORD }}
+          MACOS_CERT_P12: ${{ secrets.MACOS_CERT_P12 }}
+          MACOS_CERT_PASSWORD: ${{ secrets.MACOS_CERT_PASSWORD }}
       - name: Set Windows signing certificate
         if: matrix.os == 'windows-latest'
         id: write_file
