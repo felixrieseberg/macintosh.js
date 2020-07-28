@@ -5,10 +5,12 @@ const { createWindow } = require("./windows");
 const { getIsDevMode } = require("./devmode");
 const { shouldQuit } = require("./squirrel");
 const { setupUpdates } = require("./update");
+const { moveToAppFolderMaybe } = require("./appfolder");
 
 async function onReady() {
   if (!getIsDevMode()) process.env.NODE_ENV = "production";
 
+  moveToAppFolderMaybe();
   registerIpcHandlers();
   createWindow();
   setupUpdates();
