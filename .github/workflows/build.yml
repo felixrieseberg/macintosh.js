@@ -102,6 +102,6 @@ jobs:
           files: |
             out/**/*.deb
             out/**/*.dmg
-            out/**/*Setup.exe
+            out/**/*setup*.exe
             out/**/*.rpm
             out/**/*.zip
