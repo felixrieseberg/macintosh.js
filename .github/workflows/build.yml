@@ -68,6 +68,12 @@ jobs:
         with:
           fileName: 'win-certificate.pfx'
           encodedString: ${{ secrets.WINDOWS_CODESIGN_P12 }}
+      - name: Download disk image (ps1)
+        run: & tools/download-disk.ps1
+        if: matrix.os == 'windows-latest'
+      - name: Download disk image (sh)
+        run: chmod +x tools/download-disk.sh && ./tools/download-disk.sh
+        if: matrix.os != 'windows-latest'
       - name: Install
         run: yarn
       - name: Make

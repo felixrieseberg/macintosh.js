@@ -2,7 +2,7 @@
 
 This is Mac OS 8, running in an [Electron](https://electronjs.org/) app. Yes, it's the full thing. I'm sorry.
 
-![Screenshot](https://user-images.githubusercontent.com/1426799/88608634-0f7f4880-d037-11ea-8d3d-c2a5ef3a99d5.png)
+![Screenshot](https://user-images.githubusercontent.com/1426799/88612692-a1d81a00-d040-11ea-85c9-c64142c503d5.jpg)
 
 ## Downloads
 
