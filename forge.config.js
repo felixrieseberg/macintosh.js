@@ -30,8 +30,10 @@ module.exports = {
       'signature-flags': 'library'
     },
     osxNotarize: {
+      appBundleId: 'com.felixrieseberg.macintoshjs',
       appleId: process.env['APPLE_ID'],
-      appleIdPassword: process.env['APPLE_ID_PASSWORD']
+      appleIdPassword: process.env['APPLE_ID_PASSWORD'],
+      ascProvider: 'LT94ZKYDCJ'
     },
     ignore: [
       /\/assets(\/?)/,
