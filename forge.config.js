@@ -1,10 +1,17 @@
 const path = require('path');
+const fs = require('fs');
 const package = require('./package.json');
 
+if (process.env['WINDOWS_CODESIGN_FILE']) {
+  const certPath = path.join(__dirname, 'win-certificate.pfx');
+  const certExists = fs.existsSync(certPath);
+
+  if (certExists) {
+    process.env['WINDOWS_CODESIGN_FILE'] = certPath;
+  }
+}
+
 module.exports = {
-  hooks: {
-    postPackage: require('./tools/notarize')
-  },
   packagerConfig: {
     asar: false,
     icon: path.resolve(__dirname, 'assets', 'icon'),
@@ -18,9 +25,13 @@ module.exports = {
       identity: 'Developer ID Application: Felix Rieseberg (LT94ZKYDCJ)',
       'hardened-runtime': true,
       'gatekeeper-assess': false,
-      'entitlements': 'static/entitlements.plist',
-      'entitlements-inherit': 'static/entitlements.plist',
+      'entitlements': 'assets/entitlements.plist',
+      'entitlements-inherit': 'assets/entitlements.plist',
       'signature-flags': 'library'
+    },
+    osxNotarize: {
+      appleId: process.env['APPLE_ID'],
+      appleIdPassword: process.env['APPLE_ID_PASSWORD']
     },
     ignore: [
       /\/assets(\/?)/,
@@ -46,8 +57,8 @@ module.exports = {
           remoteReleases: '',
           setupExe: `macintoshjs-${package.version}-setup-${arch}.exe`,
           setupIcon: path.resolve(__dirname, 'assets', 'icon.ico'),
-          certificateFile: process.env.WINDOWS_CERTIFICATE_FILE,
-          certificatePassword: process.env.WINDOWS_CERTIFICATE_PASSWORD,
+          certificateFile: process.env['WINDOWS_CODESIGN_FILE'],
+          certificatePassword: process.env['WINDOWS_CODESIGN_PASSWORD'],
           loadingGif: './assets/loadingGif.gif',
         }
       }
