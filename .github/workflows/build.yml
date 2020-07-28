@@ -33,16 +33,11 @@ jobs:
         run: yarn lint
   build:
     needs: lint
-    runs-on: ${{ matrix.platform.host }}
+    name: Build (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        platform:
-          - host: windows-latest
-            target: win32
-          - host: macOS-latest
-            target: darwin
-          - host: ubuntu-latest
-            target: linux
+        os: [ macOS-latest, ubuntu-latest, windows-latest ]
     steps:
       - uses: actions/checkout@v2
       - name: Setup Node.js
@@ -53,7 +48,7 @@ jobs:
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn cache dir)"
       - uses: actions/cache@v1
-        if: matrix.platform.host != 'macOS-latest'
+        if: matrix.os != 'macOS-latest'
         id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
         with:
           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
@@ -62,7 +57,7 @@ jobs:
             ${{ runner.os }}-yarn-
       - name: Set MacOS signing certs
         if: matrix.os == 'macOS-latest'
-        run: chmod +x tools/add-osx-cert.sh && ./tools/add-osx-cert.sh
+        run: chmod +x tools/add-macos-cert.sh && ./tools/add-macos-cert.sh
         env:
           CERTIFICATE_OSX_APPLICATION: ${{ secrets.MACOS_CERT_P12 }}
           CERTIFICATE_PASSWORD: ${{ secrets.MACOS_CERT_PASSWORD }}
