@@ -153,6 +153,9 @@ function getPrefs(userImages = []) {
     const prefsPath = path.join(__dirname, "prefs");
     let prefs = fs.readFileSync(prefsTemplatePath, { encoding: "utf-8" });
 
+    // Replace line endings, just in case
+    prefs = prefs.replaceAll('\r\n', '\n');
+
     if (userImages && userImages.length > 0) {
       console.log(`getPrefs: Found ${userImages.length} user images`);
       userImages.forEach((file) => {
