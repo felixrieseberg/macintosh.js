@@ -36,7 +36,12 @@ function getUserDataDiskImage() {
 
   // If there's a disk image, move it over
   if (!fs.existsSync(diskImageUserPath)) {
-    fs.renameSync(diskImagePath, diskImageUserPath);
+    try {
+      fs.renameSync(diskImagePath, diskImageUserPath);
+    } catch (error) {
+      // This is _probably_ a permissions thing, let's copy the file
+      fs.copyFileSync(diskImagePath, diskImageUserPath);
+    }
   } else {
     console.log(
       `getUserDataDiskImage: Image in user data dir, not doing anything`
