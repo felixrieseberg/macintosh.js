@@ -30,6 +30,10 @@ Yes, you can. Click on the "Help" button at the bottom of the running app to see
 
 No. For what it's worth, the web was quite different 30 years ago - and you wouldn't be able to open even Google. However, Internet Explorer and Netscape are installed, as is the "Web Sharing Server", if you want to play around a bit.
 
+## Credits
+
+Please check out the [CREDITS](CREDITS.md)!
+
 ## License
 
 This project is provided for educational purposes only. It is not affiliated with and has
