@@ -342,7 +342,6 @@ self.onmessage = async function (msg) {
   if (msg && msg.data === "disk_save") {
     const diskData = Module.FS.readFile("/disk");
     const diskPath = getUserDataDiskPath();
-    const basiliskDiskPath = path.join(__dirname, "disk");
 
     // I wish we could do this with promises, but OOM crashes kill that idea
     try {
@@ -351,14 +350,6 @@ self.onmessage = async function (msg) {
       console.log(`Finished writing disk`);
     } catch (error) {
       console.error(`Failed to write disk`, error);
-    }
-
-    try {
-      if (fs.existsSync(basiliskDiskPath) && !(Module && Module.isDevMode)) {
-        fs.unlinkSync(basiliskDiskPath);
-      }
-    } catch (error) {
-      console.error(`Failed to delete ${basiliskDiskPath}`);
     }
 
     // Now, user files
