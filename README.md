@@ -11,6 +11,12 @@ This is Mac OS 8, running in an [Electron](https://electronjs.org/) app pretendi
 | Standalone Download | 📦[Standalone, 32-bit](https://github.com/felixrieseberg/macintosh.js/releases/download/v1.0.2/macintosh.js-win32-ia32-1.0.2.zip) <br /> 📦[Standalone, 64-bit](https://github.com/felixrieseberg/macintosh.js/releases/download/v1.0.2/macintosh.js-win32-x64-1.0.2.zip)  | 📦[Standalone](https://github.com/felixrieseberg/macintosh.js/releases/download/v1.0.2/macintosh.js-darwin-x64-1.0.2.zip) |  |
 | Installer | 💽[Setup, 64-bit](https://github.com/felixrieseberg/macintosh.js/releases/download/v1.0.2/macintoshjs-1.0.2-setup-x64.exe) <br /> 💽[Setup, 32-bit](https://github.com/felixrieseberg/macintosh.js/releases/download/v1.0.2/macintoshjs-1.0.2-setup-ia32.exe)  |  |  💽[deb, 64-bit](https://github.com/felixrieseberg/macintosh.js/releases/download/v1.0.2/macintosh.js_1.0.2_amd64.deb) <br /> 💽[rpm, 64-bit](https://github.com/felixrieseberg/macintosh.js/releases/download/v1.0.2/macintosh.js-1.0.2-1.x86_64.rpm) |
 
+
+## Install using Homebrew
+```
+brew cask install macintoshjs
+```
+
 ## Does it work?
 Yes! Quite well, actually - on macOS, Windows, and Linux. Bear in mind that this is written entirely in JavaScript, so please adjust your expectations. The virtual machine is emulating a 1991 Macintosh Quadra 900 with a Motorola CPU, which Apple used before switching to the PowerPC architecture (Apple/IBM/Motorola) in the mid 1990s.
 
