@@ -30,9 +30,13 @@ Yes, you can. Click on the "Help" button at the bottom of the running app to see
 
 No. For what it's worth, the web was quite different 30 years ago - and you wouldn't be able to open even Google. However, Internet Explorer and Netscape are installed, as is the "Web Sharing Server", if you want to play around a bit.
 
+## Should I use this for [serious application]?
+
+Probably not. This is a toy - it's not the best nor the most performant way to emulate an old Macintosh. It is, however, a quick and easy way to experience a bit of nostalgia if you're _not_ trying to do anything serious with it.
+
 ## Credits
 
-Please check out the [CREDITS](CREDITS.md)!
+Please check out the [CREDITS](CREDITS.md)! This app wouldn't be possible with the hard work of [Christian Bauer](https://www.cebix.net/) and [James Friend](https://jamesfriend.com.au/), who did everything that seems like computing magic here. 
 
 ## License
 
