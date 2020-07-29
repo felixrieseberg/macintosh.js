@@ -10,7 +10,7 @@ const macintoshCopyPath = path.join(__dirname, "user_files");
 let userDataPath;
 
 function getUserDataDiskPath() {
-  return path.join(userDataPath, 'disk');
+  return path.join(userDataPath, "disk");
 }
 
 function cleanupCopyPath() {
@@ -32,51 +32,42 @@ function getUserDataDiskImage() {
   }
 
   const diskImageUserPath = getUserDataDiskPath();
-  const diskImagePath = path.join(__dirname, 'disk');
+  const diskImagePath = path.join(__dirname, "disk");
 
   // If there's a disk image, move it over
-  if (fs.existsSync(diskImageUserPath)) {
-    // Delete a possible basilisk disk image
-    if (fs.existsSync(diskImagePath)) {
-      console.log(`Disk image ${diskImageUserPath} exists, deleting ${diskImagePath}`);
-      fs.unlinkSync(diskImagePath);
-    }
-
-    fs.renameSync(diskImageUserPath, diskImagePath);
+  if (!fs.existsSync(diskImageUserPath)) {
+    fs.renameSync(diskImagePath, diskImageUserPath);
   } else {
-    console.log(`getUserDataDiskImage: No image in user data dir, not doing anything`);
+    console.log(
+      `getUserDataDiskImage: Image in user data dir, not doing anything`
+    );
   }
 }
 
 // Taken a given path, it'll look at all the files in there,
 // copy them over to the basilisk folder, and then add them
 // to MEMFS
-function copyFilesAtPath(module, sourcePath) {
+function preloadFilesAtPath(module, initalSourcePath) {
   try {
-    const absoluteSourcePath = path.join(macDir, sourcePath);
-    const absoluteTargetPath = path.join(macintoshCopyPath, sourcePath);
-    const targetPath = `/macintosh.js${sourcePath ? `/${sourcePath}` : ""}`;
-    const files = fs.readdirSync(absoluteSourcePath).filter((v) => {
+    const sourcePath = path.join(macDir, initalSourcePath);
+    const targetPath = `/macintosh.js${
+      initalSourcePath ? `/${initalSourcePath}` : ""
+    }`;
+    const files = fs.readdirSync(sourcePath).filter((v) => {
       // Remove hidden, iso, and img files
-      return !v.startsWith('.') && !v.endsWith(".iso") && !v.endsWith(".img");
+      return !v.startsWith(".") && !v.endsWith(".iso") && !v.endsWith(".img");
     });
 
     (files || []).forEach((fileName) => {
       try {
         // If not, let's move on
-        const fileSourcePath = path.join(absoluteSourcePath, fileName);
-        const copyPath = path.join(absoluteTargetPath, fileName);
+        const fileSourcePath = path.join(sourcePath, fileName);
         const relativeSourcePath = `${
-          sourcePath ? `${sourcePath}/` : ""
+          initalSourcePath ? `${initalSourcePath}/` : ""
         }${fileName}`;
-        const fileUrl = `user_files/${relativeSourcePath}`;
 
         // Check if directory
         if (fs.statSync(fileSourcePath).isDirectory()) {
-          if (!fs.existsSync(copyPath)) {
-            fs.mkdirSync(copyPath);
-          }
-
           try {
             const virtualDirPath = `${targetPath}/${fileName}`;
             module.FS.mkdir(virtualDirPath);
@@ -84,21 +75,15 @@ function copyFilesAtPath(module, sourcePath) {
             console.log(error);
           }
 
-          copyFilesAtPath(module, relativeSourcePath);
+          preloadFilesAtPath(module, relativeSourcePath);
           return;
         }
 
-        // We copy the files over and then add them as preload
-        console.log(`copyFilesAtPath: Adding ${fileName}`);
-        fs.copyFileSync(fileSourcePath, copyPath);
-
-        module.FS_createPreloadedFile(
-          targetPath,
-          fileName,
-          fileUrl,
-          true,
-          true
-        );
+        createPreloadedFile(module, {
+          parent: targetPath,
+          name: fileName,
+          url: fileSourcePath,
+        });
       } catch (error) {
         postMessage("showMessageBoxSync", {
           type: "error",
@@ -106,7 +91,10 @@ function copyFilesAtPath(module, sourcePath) {
           message: `We tried to transfer ${fileName} to the virtual machine, but failed. The error was: ${error}`,
         });
 
-        console.error(`copyFilesAtPath: Failed to preload ${fileName}`, error);
+        console.error(
+          `preloadFilesAtPath: Failed to preload ${fileName}`,
+          error
+        );
       }
     });
   } catch (error) {
@@ -116,20 +104,24 @@ function copyFilesAtPath(module, sourcePath) {
       message: `We tried to transfer files to the virtual machine, but failed. The error was: ${error}`,
     });
 
-    console.error(`copyFilesAtPath: Failed to copyFilesAtPath`, error);
+    console.error(`preloadFilesAtPath: Failed to preloadFilesAtPath`, error);
   }
-};
+}
+
+function createPreloadedFile(module, options) {
+  const parent = options.parent || `/`;
+  const name = options.name || path.basename(options.url);
+  const url = options.url;
+
+  console.log(`Adding preload file`, { parent, name, url });
+  module.FS_createPreloadedFile(parent, name, url, true, true);
+}
 
 function addAutoloader(module) {
   const loadDatafiles = function () {
-    module.autoloadFiles.forEach((filepath) => {
-      const parent = `/`;
-      const name = path.basename(filepath);
-
-      console.log(`Adding preload file`, { parent, name, url: filepath });
-
-      module.FS_createPreloadedFile(parent, name, filepath, true, true);
-    });
+    module.autoloadFiles.forEach(({ url, name }) =>
+      createPreloadedFile(module, { url, name })
+    );
 
     // If the user has a macintosh.js dir, we'll copy over user
     // data
@@ -138,7 +130,7 @@ function addAutoloader(module) {
     }
 
     // Load user files
-    copyFilesAtPath(module, "");
+    preloadFilesAtPath(module, "");
   };
 
   if (module.autoloadFiles) {
@@ -182,24 +174,23 @@ function writeSafely(filePath, fileData) {
   });
 }
 
-function getPrefs(userImages = []) {
-  let result = '';
-
+function writePrefs(userImages = []) {
   try {
     const prefsTemplatePath = path.join(__dirname, "prefs_template");
-    const prefsPath = path.join(__dirname, "prefs");
+    const prefsPath = path.join(userDataPath, "prefs");
+
     let prefs = fs.readFileSync(prefsTemplatePath, { encoding: "utf-8" });
 
     // Replace line endings, just in case
-    prefs = prefs.replaceAll('\r\n', '\n');
+    prefs = prefs.replaceAll("\r\n", "\n");
 
     if (userImages && userImages.length > 0) {
-      console.log(`getPrefs: Found ${userImages.length} user images`);
-      userImages.forEach((file) => {
-        if (file.endsWith(".iso")) {
-          prefs += `\ncdrom ${file}`;
-        } else if (file.endsWith(".img")) {
-          prefs += `\ndisk ${file}`;
+      console.log(`writePrefs: Found ${userImages.length} user images`);
+      userImages.forEach(({ name }) => {
+        if (name.endsWith(".iso")) {
+          prefs += `\ncdrom ${name}`;
+        } else if (name.endsWith(".img")) {
+          prefs += `\ndisk ${name}`;
         }
       });
     }
@@ -207,13 +198,9 @@ function getPrefs(userImages = []) {
     prefs += `\n`;
 
     fs.writeFileSync(prefsPath, prefs);
-    result = 'prefs';
   } catch (error) {
-    console.error(`getPrefs: Failed to set prefs`, error);
-    result = 'prefs_template';
+    console.error(`writePrefs: Failed to set prefs`, error);
   }
-
-  return result;
 }
 
 function isMacDirFileOfType(extension = "", v = "") {
@@ -224,13 +211,13 @@ function isMacDirFileOfType(extension = "", v = "") {
   return isMatch;
 }
 
-function copyUserImages() {
+function getUserImages() {
   const result = [];
 
   try {
     // No need if the macDir doesn't exist
     if (!fs.existsSync(macDir)) {
-      console.log(`autoMountImageFiles: ${macDir} does not exist, exit`);
+      console.log(`getUserImages: ${macDir} does not exist, exit`);
       return result;
     }
 
@@ -239,52 +226,41 @@ function copyUserImages() {
     const isoFiles = macDirFiles.filter((v) => isMacDirFileOfType("iso", v));
     const isoImgFiles = [...isoFiles, ...imgFiles];
 
-    console.log(`copyUserImages: iso and img files`, isoImgFiles);
+    console.log(`getUserImages: iso and img files`, isoImgFiles);
 
     isoImgFiles.forEach((fileName, i) => {
-      const sourcePath = path.join(macDir, fileName);
+      const url = path.join(macDir, fileName);
       const sanitizedFileName = `user_image_${i}_${fileName.replace(
         /[^\w\s\.]/gi,
         ""
       )}`;
-      const targetPath = path.join(__dirname, sanitizedFileName);
 
-      if (fs.existsSync(targetPath)) {
-        const sourceStat = fs.statSync(sourcePath);
-        const targetStat = fs.statSync(targetPath);
-
-        // Copy if the length is different
-        if (sourceStat.size !== targetStat.size) {
-          fs.copyFileSync(sourcePath, targetPath);
-        } else {
-          console.log(
-            `autoMountImageFiles: ${sourcePath} already exists in ${targetPath}, not copying`
-          );
-        }
-      } else {
-        fs.copyFileSync(sourcePath, targetPath);
-      }
-
-      console.log(`Copied over ${targetPath}`);
-      result.push(sanitizedFileName);
-    });
-
-    // Delete all old files
-    const imagesCopyFiles = fs.readdirSync(__dirname);
-    imagesCopyFiles.forEach((v) => {
-      if (v.startsWith("user_image_") && !result.includes(v)) {
-        fs.unlinkSync(path.join(__dirname, v));
-      }
+      result.push({ url, name: sanitizedFileName });
     });
   } catch (error) {
-    console.error(`copyUserImages: Encountered error`, error);
+    console.error(`getUserImages: Encountered error`, error);
   }
 
   return result;
 }
 
-function getAutoLoadFiles(userImages = [], prefs = '') {
-  const autoLoadFiles = ["disk", "rom", prefs, ...userImages];
+function getAutoLoadFiles(userImages = []) {
+  const autoLoadFiles = [
+    {
+      name: "disk",
+      url: path.join(userDataPath, "disk"),
+    },
+    {
+      name: "rom",
+      url: path.join(__dirname, "rom"),
+    },
+    {
+      name: "prefs",
+      url: path.join(userDataPath, "prefs"),
+    },
+    ...userImages,
+  ];
+
   return autoLoadFiles;
 }
 
@@ -366,7 +342,7 @@ self.onmessage = async function (msg) {
   if (msg && msg.data === "disk_save") {
     const diskData = Module.FS.readFile("/disk");
     const diskPath = getUserDataDiskPath();
-    const basiliskDiskPath = path.join(__dirname, 'disk');
+    const basiliskDiskPath = path.join(__dirname, "disk");
 
     // I wish we could do this with promises, but OOM crashes kill that idea
     try {
@@ -488,9 +464,17 @@ function startEmulator(parentConfig) {
   let AudioConfig = null;
   let AudioBufferQueue = [];
 
-  const userImages = copyUserImages();
-  const prefs = getPrefs(userImages)
-  const arguments = getAutoLoadFiles(userImages, prefs);
+  // Check for user images
+  const userImages = getUserImages();
+
+  // Write prefs to user data dir
+  writePrefs(userImages);
+
+  // Assemble preload files
+  const autoloadFiles = getAutoLoadFiles(userImages);
+
+  // Set arguments
+  const arguments = ["--config", "prefs"];
 
   Module = {
     autoloadFiles,
