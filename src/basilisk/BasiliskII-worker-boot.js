@@ -183,6 +183,8 @@ function writeSafely(filePath, fileData) {
 }
 
 function getPrefs(userImages = []) {
+  let result = '';
+
   try {
     const prefsTemplatePath = path.join(__dirname, "prefs_template");
     const prefsPath = path.join(__dirname, "prefs");
@@ -205,11 +207,13 @@ function getPrefs(userImages = []) {
     prefs += `\n`;
 
     fs.writeFileSync(prefsPath, prefs);
+    result = 'prefs';
   } catch (error) {
     console.error(`getPrefs: Failed to set prefs`, error);
+    result = 'prefs_template';
   }
 
-  return "prefs";
+  return result;
 }
 
 function isMacDirFileOfType(extension = "", v = "") {
@@ -279,8 +283,8 @@ function copyUserImages() {
   return result;
 }
 
-function getAutoLoadFiles(userImages = []) {
-  const autoLoadFiles = ["disk", "rom", "prefs", ...userImages];
+function getAutoLoadFiles(userImages = [], prefs = '') {
+  const autoLoadFiles = ["disk", "rom", prefs, ...userImages];
   return autoLoadFiles;
 }
 
@@ -483,14 +487,15 @@ function startEmulator(parentConfig) {
 
   let AudioConfig = null;
   let AudioBufferQueue = [];
+
   const userImages = copyUserImages();
+  const prefs = getPrefs(userImages)
+  const arguments = getAutoLoadFiles(userImages, prefs);
 
   Module = {
-    autoloadFiles: getAutoLoadFiles(userImages),
-
-    userImages: userImages,
-
-    arguments: ["--config", getPrefs(userImages)],
+    autoloadFiles,
+    userImages,
+    arguments,
     canvas: null,
 
     blit: function blit(bufPtr, width, height, depth, usingPalette) {
