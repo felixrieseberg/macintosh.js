@@ -1,23 +1,23 @@
-const { app, BrowserWindow, shell } = require("electron");
-const path = require("path");
+const { app, BrowserWindow, shell } = require('electron')
+const path = require('path')
 
-const { getIsDevMode } = require("./devmode");
+const { getIsDevMode } = require('./devmode')
 
-const windowList = {};
-let mainWindow;
+const windowList = {}
+let mainWindow
 
-function getMainWindow() {
-  return mainWindow;
+function getMainWindow () {
+  return mainWindow
 }
 
-function handleNewWindow(event, url, frameName, disposition, options) {
+function handleNewWindow (event, url, frameName, disposition, options) {
   // open window as modal
-  event.preventDefault();
+  event.preventDefault()
 
   // Don't open the same window multiple times
   if (windowList[url]) {
-    windowList[url].focus();
-    return;
+    windowList[url].focus()
+    return
   }
 
   Object.assign(options, {
@@ -29,33 +29,33 @@ function handleNewWindow(event, url, frameName, disposition, options) {
     resizable: true,
     webPreferences: {
       nodeIntegration: true,
-      navigateOnDragDrop: false,
-    },
-  });
-
-  let newWindow = new BrowserWindow(options);
-
-  newWindow.webContents.on("will-navigate", (event, url) => {
-    if (url.startsWith("http")) {
-      event.preventDefault();
-      shell.openExternal(url);
+      navigateOnDragDrop: false
     }
-  });
+  })
 
-  event.newGuest = newWindow;
-  newWindow.setMenu(null);
-  windowList[url] = newWindow;
+  const newWindow = new BrowserWindow(options)
+
+  newWindow.webContents.on('will-navigate', (event, url) => {
+    if (url.startsWith('http')) {
+      event.preventDefault()
+      shell.openExternal(url)
+    }
+  })
+
+  event.newGuest = newWindow
+  newWindow.setMenu(null)
+  windowList[url] = newWindow
 
   if (getIsDevMode()) {
-    newWindow.webContents.toggleDevTools();
+    newWindow.webContents.toggleDevTools()
   }
 
-  newWindow.on("closed", () => {
-    delete windowList[url];
-  });
+  newWindow.on('closed', () => {
+    delete windowList[url]
+  })
 }
 
-function createWindow() {
+function createWindow () {
   // Create the browser window.
   mainWindow = new BrowserWindow({
     width: 900,
@@ -69,25 +69,25 @@ function createWindow() {
       nativeWindowOpen: true,
       navigateOnDragDrop: false,
       nodeIntegrationInWorker: true,
-      sandbox: false,
-    },
-  });
+      sandbox: false
+    }
+  })
 
   // and load the index.html of the app.
-  mainWindow.loadFile(path.join(__dirname, "../renderer/index.html"));
+  mainWindow.loadFile(path.join(__dirname, '../renderer/index.html'))
 
   // Disable menu
-  mainWindow.setMenu(null);
+  mainWindow.setMenu(null)
 
   // Ensure we create child windows with the correct settings
-  mainWindow.webContents.on("new-window", handleNewWindow);
+  mainWindow.webContents.on('new-window', handleNewWindow)
 
   if (getIsDevMode()) {
-    mainWindow.webContents.toggleDevTools();
+    mainWindow.webContents.toggleDevTools()
   }
 }
 
 module.exports = {
   createWindow,
-  getMainWindow,
-};
+  getMainWindow
+}

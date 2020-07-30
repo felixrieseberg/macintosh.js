@@ -1,34 +1,34 @@
-const fs = require("fs");
-const path = require("path");
-const { app } = require("electron");
+const fs = require('fs')
+const path = require('path')
+const { app } = require('electron')
 
-const appDataPath = app.getPath("userData");
-const devFilePath = path.join(appDataPath, "developer");
+const appDataPath = app.getPath('userData')
+const devFilePath = path.join(appDataPath, 'developer')
 
-let isDevMode;
+let isDevMode
 
-function getIsDevMode() {
+function getIsDevMode () {
   if (isDevMode !== undefined) {
-    return isDevMode;
+    return isDevMode
   }
 
-  return (isDevMode = !app.isPackaged || fs.existsSync(devFilePath));
+  return (isDevMode = !app.isPackaged || fs.existsSync(devFilePath))
 }
 
-function setIsDevMode(set) {
+function setIsDevMode (set) {
   if (set && !getIsDevMode()) {
     fs.writeFileSync(
       devFilePath,
-      `So you're a developer, huh? Neat! Welcome aboard!`
-    );
+      'So you\'re a developer, huh? Neat! Welcome aboard!'
+    )
   } else if (!set && getIsDevMode()) {
-    fs.unlinkSync(devFilePath);
+    fs.unlinkSync(devFilePath)
   }
 
-  isDevMode = set;
+  isDevMode = set
 }
 
 module.exports = {
   getIsDevMode,
-  setIsDevMode,
-};
+  setIsDevMode
+}

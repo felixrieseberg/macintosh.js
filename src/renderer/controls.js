@@ -1,26 +1,26 @@
-const { quit, devtools } = require("./ipc");
-const { getIsWorkerRunning, getIsWorkerSaving } = require("./worker");
-const { showCloseWarning } = require("./dialogs");
-const { getIsDevMode } = require("./ipc");
+const { quit, devtools } = require('./ipc')
+const { getIsWorkerRunning, getIsWorkerSaving } = require('./worker')
+const { showCloseWarning } = require('./dialogs')
+const { getIsDevMode } = require('./ipc')
 
-async function registerControls() {
-  document.querySelector("#close").addEventListener("click", () => {
+async function registerControls () {
+  document.querySelector('#close').addEventListener('click', () => {
     if (!getIsWorkerRunning()) {
-      quit();
+      quit()
     } else if (!getIsWorkerSaving()) {
-      showCloseWarning();
+      showCloseWarning()
     } else {
       // We're saving, and we're doing nothing. We're making the user wait.
     }
-  });
+  })
 
-  document.querySelector("#devtools").addEventListener("click", () => {
-    devtools();
-  });
+  document.querySelector('#devtools').addEventListener('click', () => {
+    devtools()
+  })
 
   if (await getIsDevMode()) {
-    document.querySelector("#devtools").classList.remove("hidden");
+    document.querySelector('#devtools').classList.remove('hidden')
   }
 }
 
-registerControls();
+registerControls()

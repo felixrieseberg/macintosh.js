@@ -1,24 +1,24 @@
-const { quit } = require("./ipc");
+const { quit } = require('./ipc')
 
-function setupDialogs() {
+function setupDialogs () {
   // Still empty
 }
 
-function showCloseWarning() {
-  const warningDialog = document.querySelector("#warning");
+function showCloseWarning () {
+  const warningDialog = document.querySelector('#warning')
 
-  document.querySelector("#warning-quit").onclick = () => {
-    quit();
-  };
+  document.querySelector('#warning-quit').onclick = () => {
+    quit()
+  }
 
-  document.querySelector("#warning-cancel").onclick = () => {
-    warningDialog.classList.add("hidden");
-  };
+  document.querySelector('#warning-cancel').onclick = () => {
+    warningDialog.classList.add('hidden')
+  }
 
-  warningDialog.classList.remove("hidden");
+  warningDialog.classList.remove('hidden')
 }
 
 module.exports = {
   setupDialogs,
-  showCloseWarning,
-};
+  showCloseWarning
+}
