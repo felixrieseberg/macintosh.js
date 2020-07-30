@@ -75,7 +75,15 @@ module.exports = {
     },
     {
       name: '@electron-forge/maker-deb',
-      platforms: ['linux']
+      platforms: ['linux'],
+      options: {
+        maintainer: 'Felix Rieseberg',
+        homepage: 'https://github.com/felixrieseberg/macintosh.js',
+        categories: [
+          'Education',
+        ],
+        icon: path.resolve(__dirname, 'assets', 'icon.png')
+      }
     },
     {
       name: '@electron-forge/maker-rpm',
