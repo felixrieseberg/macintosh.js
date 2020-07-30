@@ -43,8 +43,9 @@ function tryToSendInput() {
     switch (inputEvent.type) {
       case "mousemove":
         hasMouseMove = true;
-        mouseMoveX += inputEvent.dx;
-        mouseMoveY += inputEvent.dy;
+        // Make change according to https://github.com/felixrieseberg/macintosh.js/issues/6#issuecomment-665981700
+        mouseMoveX = inputEvent.dx;
+        mouseMoveY = inputEvent.dy;
         break;
       case "mousedown":
       case "mouseup":
