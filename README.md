@@ -36,7 +36,7 @@ Probably not. This is a toy - it's not the best nor the most performant way to e
 
 ## Credits
 
-Please check out the [CREDITS](CREDITS.md)! This app wouldn't be possible with the hard work of [Christian Bauer](https://www.cebix.net/) and [James Friend](https://jamesfriend.com.au/), who did everything that seems like computing magic here.
+Please check out the [CREDITS](CREDITS.md)! This app wouldn't be possible without the hard work of [Christian Bauer](https://www.cebix.net/) and [James Friend](https://jamesfriend.com.au/), who did everything that seems like computing magic here.
 
 ## License
 
