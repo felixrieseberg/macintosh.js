@@ -1,6 +1,5 @@
 const fs = require("fs");
 const path = require("path");
-const { error } = require("console");
 
 const homeDir = require("os").homedir();
 const macDir = path.join(homeDir, "macintosh.js");
@@ -11,6 +10,24 @@ let userDataPath;
 
 function getUserDataDiskPath() {
   return path.join(userDataPath, "disk");
+}
+
+// File type utilities
+
+function isFile(v = "") {
+  return fs.statSync(path.join(macDir, v)).isFile();
+}
+
+function isHiddenFile(filename = '') {
+  return filename.startsWith('.');
+}
+
+function isCDImage(filename = '') {
+  return filename.endsWith('.iso') || filename.endsWith('.toast');
+}
+
+function isDiskImage(filename = '') {
+  return filename.endsWith('.img') || filename.endsWith('.dsk');
 }
 
 function cleanupCopyPath() {
@@ -60,7 +77,7 @@ function preloadFilesAtPath(module, initalSourcePath) {
     }`;
     const files = fs.readdirSync(sourcePath).filter((v) => {
       // Remove hidden, iso, and img files
-      return !v.startsWith(".") && !v.endsWith(".iso") && !v.endsWith(".img");
+      return !isHiddenFile(v) && !isDiskImage(v) && !isCDImage(v);
     });
 
     (files || []).forEach((fileName) => {
@@ -192,9 +209,9 @@ function writePrefs(userImages = []) {
     if (userImages && userImages.length > 0) {
       console.log(`writePrefs: Found ${userImages.length} user images`);
       userImages.forEach(({ name }) => {
-        if (name.endsWith(".iso")) {
+        if (isCDImage(name)) {
           prefs += `\ncdrom ${name}`;
-        } else if (name.endsWith(".img")) {
+        } else if (isDiskImage(name)) {
           prefs += `\ndisk ${name}`;
         }
       });
@@ -208,14 +225,6 @@ function writePrefs(userImages = []) {
   }
 }
 
-function isMacDirFileOfType(extension = "", v = "") {
-  const isType = v.endsWith(`.${extension}`);
-  const isMatch = isType && fs.statSync(path.join(macDir, v)).isFile();
-
-  console.log(`isMacDirFileOfType: ${v} is file and ${extension}: ${isMatch}`);
-  return isMatch;
-}
-
 function getUserImages() {
   const result = [];
 
@@ -227,8 +236,8 @@ function getUserImages() {
     }
 
     const macDirFiles = fs.readdirSync(macDir);
-    const imgFiles = macDirFiles.filter((v) => isMacDirFileOfType("img", v));
-    const isoFiles = macDirFiles.filter((v) => isMacDirFileOfType("iso", v));
+    const imgFiles = macDirFiles.filter((v) => isFile(v) && isDiskImage(v));
+    const isoFiles = macDirFiles.filter((v) => isFile(v) && isCDImage(v));
     const isoImgFiles = [...isoFiles, ...imgFiles];
 
     console.log(`getUserImages: iso and img files`, isoImgFiles);
