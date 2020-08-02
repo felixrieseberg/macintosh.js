@@ -62,7 +62,8 @@ jobs:
           MACOS_CERT_P12: ${{ secrets.MACOS_CERT_P12 }}
           MACOS_CERT_PASSWORD: ${{ secrets.MACOS_CERT_PASSWORD }}
       - name: Set Windows signing certificate
-        if: ${{ matrix.os == 'windows-latest' }} && ${{ secrets.WINDOWS_CODESIGN_P12 }}
+        if: matrix.os == 'windows-latest'
+        continue-on-error: true
         id: write_file
         uses: timheuer/base64-to-file@v1
         with:
