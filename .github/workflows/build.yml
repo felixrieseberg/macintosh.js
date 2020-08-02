@@ -62,7 +62,7 @@ jobs:
           MACOS_CERT_P12: ${{ secrets.MACOS_CERT_P12 }}
           MACOS_CERT_PASSWORD: ${{ secrets.MACOS_CERT_PASSWORD }}
       - name: Set Windows signing certificate
-        if: matrix.os == 'windows-latest'
+        if: ${{ matrix.os == 'windows-latest' && secrets.WINDOWS_CODESIGN_P12 }}
         id: write_file
         uses: timheuer/base64-to-file@v1
         with:
@@ -105,6 +105,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
+          draft: true
           files: |
             out/**/*.deb
             out/**/*.dmg
