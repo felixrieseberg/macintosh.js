@@ -1,7 +1,7 @@
 {
   "name": "macintosh.js",
   "productName": "macintosh.js",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Macintosh's System 8 in an Electron app. I'm sorry.",
   "main": "src/main/index.js",
   "scripts": {
