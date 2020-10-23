@@ -26,11 +26,11 @@
     "update-electron-app": "^1.5.0"
   },
   "devDependencies": {
-    "@electron-forge/cli": "6.0.0-beta.52",
-    "@electron-forge/maker-deb": "6.0.0-beta.52",
-    "@electron-forge/maker-rpm": "6.0.0-beta.52",
-    "@electron-forge/maker-squirrel": "6.0.0-beta.52",
-    "@electron-forge/maker-zip": "6.0.0-beta.52",
-    "electron": "10.1.2"
+    "@electron-forge/cli": "6.0.0-beta.54",
+    "@electron-forge/maker-deb": "6.0.0-beta.54",
+    "@electron-forge/maker-rpm": "6.0.0-beta.54",
+    "@electron-forge/maker-squirrel": "6.0.0-beta.54",
+    "@electron-forge/maker-zip": "6.0.0-beta.54",
+    "electron": "10.1.5"
   }
 }
