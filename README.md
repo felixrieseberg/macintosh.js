@@ -6,10 +6,101 @@ This is Mac OS 8, running in an [Electron](https://electronjs.org/) app pretendi
 
 ## Downloads
 
-|  | Windows | macOS | Linux |
-|---------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Standalone Download | 📦[Standalone, 32-bit](https://github.com/felixrieseberg/macintosh.js/releases/download/v1.0.6/macintosh.js-win32-ia32-1.0.6.zip) <br /> 📦[Standalone, 64-bit](https://github.com/felixrieseberg/macintosh.js/releases/download/v1.0.6/macintosh.js-win32-x64-1.0.6.zip)  | 📦[Standalone](https://github.com/felixrieseberg/macintosh.js/releases/download/v1.0.6/macintosh.js-darwin-x64-1.0.6.zip) |  |
-| Installer | 💽[Setup, 64-bit](https://github.com/felixrieseberg/macintosh.js/releases/download/v1.0.6/macintoshjs-1.0.6-setup-x64.exe) <br /> 💽[Setup, 32-bit](https://github.com/felixrieseberg/macintosh.js/releases/download/v1.0.6/macintoshjs-1.0.6-setup-ia32.exe)  |  |  💽[deb, 64-bit](https://github.com/felixrieseberg/macintosh.js/releases/download/v1.0.6/macintosh.js_1.0.6_amd64.deb) <br /> 💽[rpm, 64-bit](https://github.com/felixrieseberg/macintosh.js/releases/download/v1.0.6/macintosh.js-1.0.6-1.x86_64.rpm) |
+<table class="is-fullwidth">
+</thead>
+<tbody>
+</tbody>
+  <tr>
+    <td>
+      <img src="./.github/images/windows.png" width="24"><br />
+      Windows
+    </td>
+    <td>
+      <span>32-bit</span>
+      <a href="https://github.com/felixrieseberg/macintosh.js/releases/download/v1.1.0/macintoshjs-1.1.0-setup-ia32.exe">
+        💿 Installer
+      </a> |
+      <a href="https://github.com/felixrieseberg/macintosh.js/releases/download/v1.1.0/macintosh.js-win32-ia32-1.1.0.zip">
+        📦 Standalone Zip
+      </a>
+      <br />
+      <span>64-bit</span>
+      <a href="https://github.com/felixrieseberg/macintosh.js/releases/download/v1.1.0/macintoshjs-1.1.0-setup-x64.exe">
+        💿 Installer
+      </a> |
+      <a href="https://github.com/felixrieseberg/macintosh.js/releases/download/v1.1.0/macintosh.js-win32-ia32-1.1.0.zip">
+        📦 Standalone Zip
+      </a><br />
+      <span>ARM64</span>
+      <a href="https://github.com/felixrieseberg/macintosh.js/releases/download/v1.1.0/macintoshjs-1.1.0-setup-arm64.exe">
+        💿 Installer
+      </a> |
+      <a href="https://github.com/felixrieseberg/macintosh.js/releases/download/v1.1.0/macintosh.js-win32-ia32-1.1.0.zip">
+        📦 Standalone Zip
+      </a><br />
+      <span>
+        ❓ Don't know what kind of chip you have? Hit start, enter "processor" for info.
+      </span>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <img src="./.github/images/macos.png" width="24"><br />
+      macOS
+    </td>
+    <td>
+      <span>Intel Processor</span>
+      <a href="https://github.com/felixrieseberg/macintosh.js/releases/download/v1.1.0/macintosh.js-darwin-arm64-1.1.0.zip">
+        📦 Standalone Zip
+      </a><br />
+      <span>Apple M1 Processor</span>
+      <a href="https://github.com/felixrieseberg/macintosh.js/releases/download/v1.1.0/macintosh.js-darwin-x64-1.1.0.zip">
+        📦 Standalone Zip
+      </a><br />
+      <span>
+        ❓ Don't know what kind of chip you have? Learn more at <a href="https://support.apple.com/en-us/HT211814">apple.com</a>.
+      </span>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <img src="./.github/images/linux.png" width="24"><br />
+      Linux
+    </td>
+    <td>
+      <span>32-bit</span>
+      <a href="https://github.com/felixrieseberg/macintosh.js/releases/download/v1.1.0/macintosh.js-1.1.0-1.i386.rpm">
+        💿 rpm
+      </a> |
+      <a href="https://github.com/felixrieseberg/macintosh.js/releases/download/v1.1.0/macintosh.js_1.1.0_i386.deb">
+        💿 deb
+      </a><br />
+      <span>32-bit</span>
+      <a href="https://github.com/felixrieseberg/macintosh.js/releases/download/v1.1.0/macintosh.js-1.1.0-1.x86_64.rpm">
+        💿 rpm
+      </a> |
+      <a href="https://github.com/felixrieseberg/macintosh.js/releases/download/v1.1.0/macintosh.js_1.1.0_amd64.deb">
+        💿 deb
+      </a><br />
+      <span>ARM64</span>
+      <a href="https://github.com/felixrieseberg/macintosh.js/releases/download/v1.1.0/macintosh.js-1.1.0-1.arm64.rpm">
+        💿 rpm
+      </a> |
+      <a href="https://github.com/felixrieseberg/macintosh.js/releases/download/v1.1.0/macintosh.js_1.1.0_arm64.deb">
+        💿 deb
+      </a><br />
+      <span>ARMv7 (armhf)</span>
+      <a href="https://github.com/felixrieseberg/macintosh.js/releases/download/v1.1.0/macintosh.js-1.1.0-1.arm64.rpm">
+        💿 rpm
+      </a> |
+      <a href="https://github.com/felixrieseberg/macintosh.js/releases/download/v1.1.0/macintosh.js_1.1.0_armhf.deb">
+        💿 deb
+      </a>
+    </td>
+  </tr>
+</table>
+
+<hr />
 
 ## Does it work?
 Yes! Quite well, actually - on macOS, Windows, and Linux. Bear in mind that this is written entirely in JavaScript, so please adjust your expectations. The virtual machine is emulating a 1991 Macintosh Quadra 900 with a Motorola CPU, which Apple used before switching to the PowerPC architecture (Apple/IBM/Motorola) in the mid 1990s.

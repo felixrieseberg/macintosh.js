@@ -9,8 +9,9 @@
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
-    "lint": "npx prettier --check src/{main,renderer}/*.{js,css}",
-    "fix": "npx prettier --write src/{main,renderer}/*.{js,css}"
+    "lint": "npx prettier --check src/{main,renderer}/*.{js,css} && npm run check-links",
+    "fix": "npx prettier --write src/{main,renderer}/*.{js,css}",
+    "check-links": "node tools/check-links.js"
   },
   "keywords": [],
   "author": {
@@ -31,6 +32,7 @@
     "@electron-forge/maker-rpm": "6.0.0-beta.54",
     "@electron-forge/maker-squirrel": "6.0.0-beta.54",
     "@electron-forge/maker-zip": "6.0.0-beta.54",
-    "electron": "11.1.1"
+    "electron": "11.1.1",
+    "node-fetch": "^2.6.1"
   }
 }
