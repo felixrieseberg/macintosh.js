@@ -50,11 +50,11 @@ This is Mac OS 8, running in an [Electron](https://electronjs.org/) app pretendi
     </td>
     <td>
       <span>Intel Processor</span>
-      <a href="https://github.com/felixrieseberg/macintosh.js/releases/download/v1.1.0/macintosh.js-darwin-arm64-1.1.0.zip">
+      <a href="https://github.com/felixrieseberg/macintosh.js/releases/download/v1.1.0/macintosh.js-darwin-x64-1.1.0.zip">
         📦 Standalone Zip
       </a><br />
       <span>Apple M1 Processor</span>
-      <a href="https://github.com/felixrieseberg/macintosh.js/releases/download/v1.1.0/macintosh.js-darwin-x64-1.1.0.zip">
+      <a href="https://github.com/felixrieseberg/macintosh.js/releases/download/v1.1.0/macintosh.js-darwin-arm64-1.1.0.zip">
         📦 Standalone Zip
       </a><br />
       <span>
