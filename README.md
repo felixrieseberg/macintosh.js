@@ -14,7 +14,7 @@ This is Mac OS 8, running in an [Electron](https://electronjs.org/) app pretendi
 
 ## Install using Homebrew
 ```
-brew cask install macintoshjs
+brew install --cask macintoshjs
 ```
 
 ## Does it work?
