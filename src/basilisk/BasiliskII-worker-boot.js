@@ -27,7 +27,7 @@ function isCDImage(filename = '') {
 }
 
 function isDiskImage(filename = '') {
-  return filename.endsWith('.img') || filename.endsWith('.dsk');
+  return filename.endsWith('.img') || filename.endsWith('.dsk') || filename.endsWith('.hda');
 }
 
 function cleanupCopyPath() {
