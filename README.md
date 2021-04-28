@@ -75,7 +75,7 @@ This is Mac OS 8, running in an [Electron](https://electronjs.org/) app pretendi
       <a href="https://github.com/felixrieseberg/macintosh.js/releases/download/v1.1.0/macintosh.js_1.1.0_i386.deb">
         💿 deb
       </a><br />
-      <span>32-bit</span>
+      <span>64-bit</span>
       <a href="https://github.com/felixrieseberg/macintosh.js/releases/download/v1.1.0/macintosh.js-1.1.0-1.x86_64.rpm">
         💿 rpm
       </a> |
@@ -95,7 +95,10 @@ This is Mac OS 8, running in an [Electron](https://electronjs.org/) app pretendi
       </a> |
       <a href="https://github.com/felixrieseberg/macintosh.js/releases/download/v1.1.0/macintosh.js_1.1.0_armhf.deb">
         💿 deb
-      </a>
+      </a><br />
+      <span>
+        ❓ Don't know what kind of chip you have? Run `uname -m` in the console.
+      </span>
     </td>
   </tr>
 </table>
