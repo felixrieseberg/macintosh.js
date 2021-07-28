@@ -6,9 +6,6 @@ const { getIsDevMode } = require("./devmode");
 const windowList = {};
 let mainWindow;
 
-
-
-
 function getMainWindow() {
   return mainWindow;
 }
@@ -76,7 +73,6 @@ function createWindow() {
     },
   });
 
-
   // and load the index.html of the app.
   mainWindow.loadFile(path.join(__dirname, "../renderer/index.html"));
 
@@ -85,7 +81,6 @@ function createWindow() {
 
   // Ensure we create child windows with the correct settings
   mainWindow.webContents.on("new-window", handleNewWindow);
-
 
   if (getIsDevMode()) {
     mainWindow.webContents.toggleDevTools();
