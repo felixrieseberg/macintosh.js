@@ -6,6 +6,9 @@ const { getIsDevMode } = require("./devmode");
 const windowList = {};
 let mainWindow;
 
+
+
+
 function getMainWindow() {
   return mainWindow;
 }
@@ -61,9 +64,9 @@ function createWindow() {
     width: 900,
     height: 730,
     useContentSize: true,
-    frame: false,
+    frame: true,
     transparent: true,
-    resizable: false,
+    resizable: true,
     webPreferences: {
       nodeIntegration: true,
       nativeWindowOpen: true,
@@ -72,6 +75,7 @@ function createWindow() {
       sandbox: false,
     },
   });
+
 
   // and load the index.html of the app.
   mainWindow.loadFile(path.join(__dirname, "../renderer/index.html"));
@@ -82,6 +86,7 @@ function createWindow() {
   // Ensure we create child windows with the correct settings
   mainWindow.webContents.on("new-window", handleNewWindow);
 
+
   if (getIsDevMode()) {
     mainWindow.webContents.toggleDevTools();
   }
@@ -89,5 +94,5 @@ function createWindow() {
 
 module.exports = {
   createWindow,
-  getMainWindow,
+  getMainWindow
 };

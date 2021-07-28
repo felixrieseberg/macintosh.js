@@ -98,6 +98,8 @@ window.addEventListener("keyup", function (event) {
   inputQueue.push({ type: "keyup", keyCode: event.keyCode });
 });
 
+
+
 module.exports = {
   INPUT_BUFFER_SIZE,
   inputBuffer,
