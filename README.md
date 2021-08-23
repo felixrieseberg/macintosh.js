@@ -28,14 +28,14 @@ This is Mac OS 8, running in an [Electron](https://electronjs.org/) app pretendi
       <a href="https://github.com/felixrieseberg/macintosh.js/releases/download/v1.1.0/macintoshjs-1.1.0-setup-x64.exe">
         💿 Installer
       </a> |
-      <a href="https://github.com/felixrieseberg/macintosh.js/releases/download/v1.1.0/macintosh.js-win32-ia32-1.1.0.zip">
+      <a href="https://github.com/felixrieseberg/macintosh.js/releases/download/v1.1.0/macintosh.js-win32-x64-1.1.0.zip">
         📦 Standalone Zip
       </a><br />
       <span>ARM64</span>
       <a href="https://github.com/felixrieseberg/macintosh.js/releases/download/v1.1.0/macintoshjs-1.1.0-setup-arm64.exe">
         💿 Installer
       </a> |
-      <a href="https://github.com/felixrieseberg/macintosh.js/releases/download/v1.1.0/macintosh.js-win32-ia32-1.1.0.zip">
+      <a href="https://github.com/felixrieseberg/macintosh.js/releases/download/v1.1.0/macintosh.js-win32-arm64-1.1.0.zip">
         📦 Standalone Zip
       </a><br />
       <span>
@@ -90,7 +90,7 @@ This is Mac OS 8, running in an [Electron](https://electronjs.org/) app pretendi
         💿 deb
       </a><br />
       <span>ARMv7 (armhf)</span>
-      <a href="https://github.com/felixrieseberg/macintosh.js/releases/download/v1.1.0/macintosh.js-1.1.0-1.arm64.rpm">
+      <a href="https://github.com/felixrieseberg/macintosh.js/releases/download/v1.1.0/macintosh.js-1.1.0-1.armv7hl.rpm">
         💿 rpm
       </a> |
       <a href="https://github.com/felixrieseberg/macintosh.js/releases/download/v1.1.0/macintosh.js_1.1.0_armhf.deb">
