@@ -1,6 +1,6 @@
 # macintosh.js Credits
 
-This app by <a href="https://www.felixrieseberg.com">Felix Rieseberg</a>. The real work was done by the people below:
+This app was made by <a href="https://www.felixrieseberg.com">Felix Rieseberg</a>. The real work was done by the people below:
 
 **Emulator**: Basilisk II, a 68k Macintosh emulator, by [Christian Bauer et al](http://basilisk.cebix.net), modified and compiled [with Emscripten](https://jamesfriend.com.au/basilisk-ii-classic-mac-emulator-in-the-browser) by [James Friend](https://jamesfriend.com.au).
 
