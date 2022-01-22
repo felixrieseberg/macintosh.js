@@ -33,6 +33,6 @@
     "@electron-forge/maker-squirrel": "6.0.0-beta.54",
     "@electron-forge/maker-zip": "6.0.0-beta.54",
     "electron": "11.1.1",
-    "node-fetch": "^2.6.1"
+    "node-fetch": "^3.1.1"
   }
 }
