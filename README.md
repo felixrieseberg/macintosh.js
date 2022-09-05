@@ -90,7 +90,7 @@ This is Mac OS 8, running in an [Electron](https://electronjs.org/) app pretendi
         💿 deb
       </a><br />
       <span>ARMv7 (armhf)</span>
-      <a href="https://github.com/felixrieseberg/macintosh.js/releases/download/v1.1.0/macintosh.js-1.1.0-1.arm64.rpm">
+      <a href="https://github.com/felixrieseberg/macintosh.js/releases/download/v1.1.0/macintosh.js-1.1.0-1.armv7hl.rpm">
         💿 rpm
       </a> |
       <a href="https://github.com/felixrieseberg/macintosh.js/releases/download/v1.1.0/macintosh.js_1.1.0_armhf.deb">
