@@ -1,4 +1,4 @@
-const { app, BrowserWindow, shell } = require("electron");
+const { BrowserWindow, shell } = require("electron");
 const path = require("path");
 
 const { getIsDevMode } = require("./devmode");
@@ -66,12 +66,25 @@ function createWindow() {
     resizable: true,
     webPreferences: {
       nodeIntegration: true,
+      nodeIntegrationInWorker: true,
       nativeWindowOpen: true,
+      contextIsolation: false,
       navigateOnDragDrop: false,
       nodeIntegrationInWorker: true,
       sandbox: false,
     },
   });
+
+  // Ensure that we have access to SharedArrayBuffer
+  mainWindow.webContents.session.webRequest.onHeadersReceived(
+    (details, callback) => {
+      details.responseHeaders["Cross-Origin-Opener-Policy"] = ["same-origin"];
+      details.responseHeaders["Cross-Origin-Embedder-Policy"] = [
+        "require-corp",
+      ];
+      callback({ responseHeaders: details.responseHeaders });
+    }
+  );
 
   // and load the index.html of the app.
   mainWindow.loadFile(path.join(__dirname, "../renderer/index.html"));
@@ -89,5 +102,5 @@ function createWindow() {
 
 module.exports = {
   createWindow,
-  getMainWindow
+  getMainWindow,
 };

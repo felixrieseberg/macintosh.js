@@ -1,10 +1,15 @@
 const { app, dialog } = require("electron");
+const { getIsDevMode } = require("./devmode");
 
 // If the app doesn't run from the /Applications folder,
 // we don't get to create files, which keeps the emulator from
 // running.
 function moveToAppFolderMaybe() {
   if (process.platform !== "darwin") {
+    return;
+  }
+
+  if (getIsDevMode()) {
     return;
   }
 
