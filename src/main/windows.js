@@ -61,9 +61,9 @@ function createWindow() {
     width: 900,
     height: 730,
     useContentSize: true,
-    frame: false,
+    frame: true,
     transparent: true,
-    resizable: false,
+    resizable: true,
     webPreferences: {
       nodeIntegration: true,
       nativeWindowOpen: true,
@@ -89,5 +89,5 @@ function createWindow() {
 
 module.exports = {
   createWindow,
-  getMainWindow,
+  getMainWindow
 };
