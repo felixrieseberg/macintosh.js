@@ -98,7 +98,7 @@ jobs:
         run: yarn
       - name: Make
         if: startsWith(github.ref, 'refs/tags/')
-        run: yarn make --arch=all
+        run: yarn make --arch=${{ matrix.arch }}
         env:
           APPLE_ID: ${{ secrets.APPLE_ID }}
           APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
