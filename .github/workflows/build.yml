@@ -28,12 +28,12 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-yarn-
       - name: Install
-        run: yarn
+        run: yarn --frozen-lockfile
       - name: lint
         run: yarn lint
   build:
     needs: lint
-    name: Build (${{ matrix.os }})
+    name: Build (${{ matrix.os }} - ${{ matrix.arch }})
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -53,6 +53,7 @@ jobs:
         exclude:
         - os: windows-latest
           arch: arm64
+
     steps:
       - uses: actions/checkout@v3
       - name: Setup Node.js
