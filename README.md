@@ -17,25 +17,18 @@ This is Mac OS 8, running in an [Electron](https://electronjs.org/) app pretendi
     </td>
     <td>
       <span>32-bit</span>
-      <a href="https://github.com/felixrieseberg/macintosh.js/releases/download/v1.1.0/macintoshjs-1.1.0-setup-ia32.exe">
+      <a href="https://github.com/felixrieseberg/macintosh.js/releases/download/v1.2.0/macintoshjs-1.2.0-setup-ia32.exe">
         💿 Installer
       </a> |
-      <a href="https://github.com/felixrieseberg/macintosh.js/releases/download/v1.1.0/macintosh.js-win32-ia32-1.1.0.zip">
+      <a href="https://github.com/felixrieseberg/macintosh.js/releases/download/v1.2.0/macintosh.js-win32-ia32-1.2.0.zip">
         📦 Standalone Zip
       </a>
       <br />
       <span>64-bit</span>
-      <a href="https://github.com/felixrieseberg/macintosh.js/releases/download/v1.1.0/macintoshjs-1.1.0-setup-x64.exe">
+      <a href="https://github.com/felixrieseberg/macintosh.js/releases/download/v1.2.0/macintoshjs-1.2.0-setup-x64.exe">
         💿 Installer
       </a> |
-      <a href="https://github.com/felixrieseberg/macintosh.js/releases/download/v1.1.0/macintosh.js-win32-x64-1.1.0.zip">
-        📦 Standalone Zip
-      </a><br />
-      <span>ARM64</span>
-      <a href="https://github.com/felixrieseberg/macintosh.js/releases/download/v1.1.0/macintoshjs-1.1.0-setup-arm64.exe">
-        💿 Installer
-      </a> |
-      <a href="https://github.com/felixrieseberg/macintosh.js/releases/download/v1.1.0/macintosh.js-win32-arm64-1.1.0.zip">
+      <a href="https://github.com/felixrieseberg/macintosh.js/releases/download/v1.2.0/macintosh.js-win32-x64-1.2.0.zip">
         📦 Standalone Zip
       </a><br />
       <span>
