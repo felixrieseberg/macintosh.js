@@ -98,6 +98,12 @@ This is Mac OS 8, running in an [Electron](https://electronjs.org/) app pretendi
 
 <hr />
 
+
+## Install using Homebrew
+```
+brew install --cask macintoshjs
+```
+
 ## Does it work?
 Yes! Quite well, actually - on macOS, Windows, and Linux. Bear in mind that this is written entirely in JavaScript, so please adjust your expectations. The virtual machine is emulating a 1991 Macintosh Quadra 900 with a Motorola CPU, which Apple used before switching to the PowerPC architecture (Apple/IBM/Motorola) in the mid 1990s.
 
